@@ -20,7 +20,7 @@
 		<!-- Locale maven dependency -->
 		<dependency>
 			<groupId>de.rvwbk.group03</groupId>
-			<artifactId>network</artifactId>
+			<artifactId>base</artifactId>
 			<version>1.0-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
@@ -28,6 +28,13 @@
 		<dependency>
 			<groupId>de.rvwbk.group03</groupId>
 			<artifactId>data</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>de.rvwbk.group03</groupId>
+			<artifactId>network</artifactId>
 			<version>1.0-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>

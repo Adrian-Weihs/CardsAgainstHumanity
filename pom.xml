@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>de.rvwbk.group03</groupId>
@@ -8,6 +8,20 @@
 	<packaging>pom</packaging>
 
 	<name>cardsagainsthumanity</name>
+
+	<build>
+		<plugins>
+			<plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-compiler-plugin</artifactId>
+			  <version>2.1</version>
+			  <configuration>
+			    <source>1.8</source>
+			    <target>1.8</target>
+			  </configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -28,14 +42,40 @@
 				<version>2.0.0.0</version>
 				<scope>test</scope>
 			</dependency>
+			
+			<dependency>
+				<groupId>org.slf4j</groupId>
+			    <artifactId>slf4j-api</artifactId>
+			    <version>1.7.21</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.slf4j</groupId>
+			    <artifactId>slf4j-log4j12</artifactId>
+			    <version>1.7.21</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+		</dependency>
+	</dependencies>
+	
 	<modules>
 		<module>server</module>
 		<module>client</module>
 		<module>data</module>
 		<module>data-jdbc</module>
 		<module>network</module>
-	</modules>
+		<module>data-memory</module>
+		<module>base</module>
+  </modules>
 </project>
