@@ -78,5 +78,6 @@
 		<module>data-memory</module>
 		<module>base</module>
 		<module>data-util</module>
+    <module>client-debug</module>
   </modules>
 </project>
