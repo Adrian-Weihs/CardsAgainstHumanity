@@ -1,16 +1,17 @@
 package de.rvwbk.group03.cardsagainsthumanity.network.command;
 
-import de.rvwbk.group03.cardsagainsthumanity.network.gson.Command;
+import de.rvwbk.group03.cardsagainsthumanity.network.FailedLoginReason;
+import de.rvwbk.group03.cardsagainsthumanity.network.gson.ServerCommand;
 
-public class FailedLoginCommand implements Command {
-	private String errorMessage;
+public class FailedLoginCommand implements ServerCommand {
+	private FailedLoginReason failedLoginReason;
 	
 	
-	public String getErrorMessage() {
-		return this.errorMessage;
+	public FailedLoginReason getFailedLoginReason() {
+		return this.failedLoginReason;
 	}
 	
-	public void setErrorMessage(final String errorMessage) {
-		this.errorMessage = errorMessage;
+	public void setFailedLoginReason(final FailedLoginReason failedLoginReason) {
+		this.failedLoginReason = failedLoginReason;
 	}
 }

@@ -6,9 +6,9 @@ import java.util.List;
 import de.rvwbk.group03.cardsagainsthumanity.network.BlackCard;
 import de.rvwbk.group03.cardsagainsthumanity.network.Game;
 import de.rvwbk.group03.cardsagainsthumanity.network.WhiteCard;
-import de.rvwbk.group03.cardsagainsthumanity.network.gson.Command;
+import de.rvwbk.group03.cardsagainsthumanity.network.gson.ServerCommand;
 
-public class GameCommand implements Command {
+public class GameCommand implements ServerCommand {
 	private Game game;
 	private List<WhiteCard> whiteCards = new ArrayList<>();
 	private BlackCard blackCard;

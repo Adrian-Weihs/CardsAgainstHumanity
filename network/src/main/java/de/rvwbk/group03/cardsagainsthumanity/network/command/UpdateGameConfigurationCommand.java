@@ -1,10 +1,10 @@
 package de.rvwbk.group03.cardsagainsthumanity.network.command;
 
 import de.rvwbk.group03.cardsagainsthumanity.network.Configuration;
-import de.rvwbk.group03.cardsagainsthumanity.network.gson.Command;
+import de.rvwbk.group03.cardsagainsthumanity.network.gson.ClientCommand;
 
 
-public class UpdateGameConfigurationCommand implements Command {
+public class UpdateGameConfigurationCommand implements ClientCommand {
 	private int id;
 	private Configuration configuration;
 	

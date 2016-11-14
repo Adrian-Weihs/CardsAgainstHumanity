@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.rvwbk.group03.cardsagainsthumanity.network.Game;
-import de.rvwbk.group03.cardsagainsthumanity.network.gson.Command;
+import de.rvwbk.group03.cardsagainsthumanity.network.gson.ServerCommand;
 
-public class GameListCommand implements Command {
+public class GameListCommand implements ServerCommand {
 	private List<Game> games = new ArrayList<>();
 	
 	

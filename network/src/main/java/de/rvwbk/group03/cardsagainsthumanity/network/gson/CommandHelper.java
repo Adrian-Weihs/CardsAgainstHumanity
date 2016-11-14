@@ -29,7 +29,7 @@ public final class CommandHelper {
 	 * @return The json string of the given {@code command}.
 	 */
 	public static String commandToJson(final Command command) {
-		return createGsonCommandBuilder().create().toJson(command);
+		return createGsonCommandBuilder().create().toJson(command, Command.class);
 	}
 	
 	/**

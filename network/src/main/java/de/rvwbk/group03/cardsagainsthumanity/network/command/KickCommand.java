@@ -2,9 +2,9 @@ package de.rvwbk.group03.cardsagainsthumanity.network.command;
 
 import de.rvwbk.group03.cardsagainsthumanity.network.KickReason;
 import de.rvwbk.group03.cardsagainsthumanity.network.Player;
-import de.rvwbk.group03.cardsagainsthumanity.network.gson.Command;
+import de.rvwbk.group03.cardsagainsthumanity.network.gson.ServerCommand;
 
-public class KickCommand implements Command {
+public class KickCommand implements ServerCommand {
 	private Player player;
 	private KickReason kickReason;
 	

@@ -1,8 +1,8 @@
 package de.rvwbk.group03.cardsagainsthumanity.network.command;
 
-import de.rvwbk.group03.cardsagainsthumanity.network.gson.Command;
+import de.rvwbk.group03.cardsagainsthumanity.network.gson.ServerCommand;
 
-public class FailedJoinGameCommand implements Command {
+public class FailedJoinGameCommand implements ServerCommand {
 	private String errorMessage;
 	
 	
