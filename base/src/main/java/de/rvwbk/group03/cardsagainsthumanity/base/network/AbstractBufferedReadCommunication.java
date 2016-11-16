@@ -20,6 +20,7 @@ public abstract class AbstractBufferedReadCommunication implements Runnable {
 	
 	private int tempOpenBrackets;
 	private boolean inString;
+	private boolean disconnected;
 	
 	
 	/**
@@ -31,24 +32,16 @@ public abstract class AbstractBufferedReadCommunication implements Runnable {
 	}
 	
 	
-	@Override
-	public void run() {
-		try {
-			String message;
-			while ((message = this.readerStream.readLine()) != null) {
-				this.tempOpenBrackets = 0;
-				this.inString = false;
-				
-				while (!checkBrackets(message)) {
-					// TODO: (AW 12.11.2016) Check better way if message is complete.
-					message = this.readerStream.readLine();
-				}
-				
-				handleReceivedMessage(message);
-			}
-		} catch (IOException e) {
-			LOGGER.error("Could not read the message from the client", e);
-		}
+	public BufferedReader getReader() {
+		return this.readerStream;
+	}
+	
+	public boolean isDisconnected() {
+		return this.disconnected;
+	}
+	
+	public void disconnect() {
+		this.disconnected = true;
 	}
 	
 	public abstract void handleReceivedMessage(String message);
@@ -64,7 +57,7 @@ public abstract class AbstractBufferedReadCommunication implements Runnable {
 	 * @throws IOException if.
 	 * @throws InvalidFormatException if there have been more closing brackets than opening ones
 	 */
-	private boolean checkBrackets(final String received) throws IllegalArgumentException, IOException {
+	protected boolean checkBrackets(final String received) throws IllegalArgumentException, IOException {
 		if (received == null) { // illegal message
 			return false;
 		}
