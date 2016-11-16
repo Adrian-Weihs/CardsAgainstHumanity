@@ -1,5 +1,9 @@
 package de.rvwbk.group03.cardsagainsthumanity.network.gson;
 
+import java.io.IOException;
+import java.util.Objects;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
@@ -41,6 +45,18 @@ public final class CommandHelper {
 	 */
 	public static Command jsonToCommand(final String json) throws JsonSyntaxException {
 		return createGsonCommandBuilder().create().fromJson(json, Command.class);
+	}
+	
+	public static boolean isJsonString(final String json) throws NullPointerException {
+		Objects.requireNonNull(json, "json must not be null");
+		
+		try {
+			new ObjectMapper().readTree(json);
+		} catch (IOException e) {
+			return false;
+		}
+		
+		return true;
 	}
 	
 	
