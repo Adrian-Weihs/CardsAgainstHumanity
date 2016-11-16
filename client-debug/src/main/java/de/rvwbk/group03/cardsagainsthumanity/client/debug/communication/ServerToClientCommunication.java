@@ -1,5 +1,6 @@
 package de.rvwbk.group03.cardsagainsthumanity.client.debug.communication;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.slf4j.Logger;
@@ -13,6 +14,26 @@ public class ServerToClientCommunication extends AbstractBufferedReadCommunicati
 	
 	public ServerToClientCommunication(final InputStream inputStream) throws NullPointerException {
 		super(inputStream);
+	}
+	
+	
+	@Override
+	public void run() {
+		try {
+			String message;
+			while (!isDisconnected() && (message = getReader().readLine()) != null) {
+				while (!checkBrackets(message)) {
+					LOGGER.info("Brackets worng: \"{}\"", message);
+					// TODO: (AW 12.11.2016) Check better way if message is complete.
+					message = getReader().readLine();
+				}
+				
+				handleReceivedMessage(message);
+			}
+		} catch (IOException e) {
+			//Ok, server disconnected
+			LOGGER.error("Disconnected from Server", e);
+		}
 	}
 	
 	@Override

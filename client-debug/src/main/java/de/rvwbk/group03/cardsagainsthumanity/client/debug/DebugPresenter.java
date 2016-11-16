@@ -28,7 +28,7 @@ public class DebugPresenter implements Presenter, RecievedMessageListener {
 	}
 	
 	@Override
-	public void refreshView() {
+	public void release() {
 		// TODO Auto-generated method stub
 		
 	}
