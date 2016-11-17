@@ -1,2 +1,2 @@
 # CardsAgainstHumanity
-School Projekt of the Game: Cards against Humanity
+School Project of the Game: Cards against Humanity
