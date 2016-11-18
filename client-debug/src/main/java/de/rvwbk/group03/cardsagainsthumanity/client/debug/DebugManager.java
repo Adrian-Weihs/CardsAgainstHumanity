@@ -29,6 +29,13 @@ public class DebugManager {
 		}
 	}
 	
+	public static void disconnect() throws IOException {
+		if(serverCommunication != null) {
+			serverCommunication.getSocket().close();
+			serverCommunication = null;
+		}
+	}
+	
 	public static ServerCommunication getServerCommunication() {
 		return serverCommunication;
 	}

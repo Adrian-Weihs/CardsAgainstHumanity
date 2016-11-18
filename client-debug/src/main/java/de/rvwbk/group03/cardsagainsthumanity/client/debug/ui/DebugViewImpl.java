@@ -2,7 +2,6 @@ package de.rvwbk.group03.cardsagainsthumanity.client.debug.ui;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.PrintStream;
 
@@ -44,6 +43,7 @@ public class DebugViewImpl extends JFrame implements DebugView {
 	
 	private JTextArea recivedMessageTextArea = new JTextArea();
 	private JButton connectButton = new JButton("Connect");
+	private JButton disconnectButton = new JButton("Disconnect");
 	private JButton sendJsonButton = new JButton("Send Message");
 	
 	private JTextArea jsonMessage = new JTextArea();
@@ -119,13 +119,10 @@ public class DebugViewImpl extends JFrame implements DebugView {
 		this.panel_1.add(this.panel_3);
 		this.panel_3.setLayout(new BoxLayout(this.panel_3, BoxLayout.X_AXIS));
 		
-		JButton btnDisconnect = new JButton("Disconnect");
-		this.panel_3.add(btnDisconnect);
-		btnDisconnect.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {}
-		});
-		btnDisconnect.setEnabled(false);
+		
+		this.panel_3.add(this.disconnectButton);
+		this.disconnectButton.addActionListener(event -> disconnectButtonClicked(event));
+		this.disconnectButton.setEnabled(false);
 		this.panel_3.add(this.connectButton);
 		this.connectButton.addActionListener(event -> connectButtonClicked(event));
 		
@@ -172,8 +169,25 @@ public class DebugViewImpl extends JFrame implements DebugView {
 			this.presenter.connectButtonClicked();
 			this.sendJsonButton.setEnabled(true);
 			this.connectButton.setEnabled(false);
+			this.disconnectButton.setEnabled(true);
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(this, "Could not connect to the Server", "Could not connect!", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	private void disconnectButtonClicked(final ActionEvent event) {
+		if (event == null) {
+			LOGGER.warn("Disonnect button clicked event is null.");
+			return;
+		}
+		
+		try {
+			this.presenter.disconnectButtonClicked();
+			this.sendJsonButton.setEnabled(false);
+			this.disconnectButton.setEnabled(false);
+			this.connectButton.setEnabled(true);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(this, "Could not disconnect from the Server", "Could not disconnect!", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	

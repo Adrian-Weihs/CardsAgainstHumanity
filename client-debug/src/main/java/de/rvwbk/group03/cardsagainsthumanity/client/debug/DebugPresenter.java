@@ -22,6 +22,9 @@ public class DebugPresenter implements Presenter, RecievedMessageListener {
 		DebugManager.connect();
 	}
 	
+	public void disconnectButtonClicked() throws IOException {
+		DebugManager.disconnect();
+	}
 	
 	public void sendJsonButtonClicked(final String message) throws NullPointerException {
 		DebugManager.getServerCommunication().getWriteCommunication().writeMessage(Objects.requireNonNull(message, "message must not be null"));

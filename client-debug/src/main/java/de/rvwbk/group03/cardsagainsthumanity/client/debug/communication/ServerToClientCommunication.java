@@ -32,7 +32,11 @@ public class ServerToClientCommunication extends AbstractBufferedReadCommunicati
 			}
 		} catch (IOException e) {
 			//Ok, server disconnected
-			LOGGER.error("Disconnected from Server", e);
+		}
+		try {
+			DebugManager.disconnect();
+		} catch (IOException e) {
+			// Ok already disconnected
 		}
 	}
 	
