@@ -1,4 +1,4 @@
-package de.rvwbk.group03.cardsagainsthumanity.network.gson;
+package de.rvwbk.group03.cardsagainsthumanity.network.command;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -6,6 +6,8 @@ import java.util.Objects;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+
+import de.rvwbk.group03.cardsagainsthumanity.network.gson.CommandAdapter;
 
 /**
  * This is a helper class for a command.

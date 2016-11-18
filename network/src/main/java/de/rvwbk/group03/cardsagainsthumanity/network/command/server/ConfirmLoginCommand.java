@@ -1,6 +1,4 @@
-package de.rvwbk.group03.cardsagainsthumanity.network.command;
-
-import de.rvwbk.group03.cardsagainsthumanity.network.gson.ServerCommand;
+package de.rvwbk.group03.cardsagainsthumanity.network.command.server;
 
 public class ConfirmLoginCommand implements ServerCommand {
 	private int id;

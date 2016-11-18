@@ -8,7 +8,7 @@ public class Configuration {
 	private String joinPassword = Strings.EMPTY;
 	
 	
-	public int getMaxNumberOfPlayer() {
+	public int getMaxNumberOfPlayers() {
 		return this.maxNumberOfPlayer;
 	}
 	

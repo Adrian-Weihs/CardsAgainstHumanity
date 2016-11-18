@@ -1,7 +1,6 @@
-package de.rvwbk.group03.cardsagainsthumanity.network.command;
+package de.rvwbk.group03.cardsagainsthumanity.network.command.client;
 
 import de.rvwbk.group03.cardsagainsthumanity.base.annotation.InFutureUsed;
-import de.rvwbk.group03.cardsagainsthumanity.network.gson.ClientCommand;
 
 public class LoginCommand implements ClientCommand {
 	private String name;

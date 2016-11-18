@@ -13,6 +13,8 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+import de.rvwbk.group03.cardsagainsthumanity.network.command.Command;
+
 /**
  * This {@link CommandAdapter} will be used to serialize and deserialize {@link Command}s.
  * 

@@ -1,7 +1,6 @@
-package de.rvwbk.group03.cardsagainsthumanity.network.command;
+package de.rvwbk.group03.cardsagainsthumanity.network.command.server;
 
 import de.rvwbk.group03.cardsagainsthumanity.network.Game;
-import de.rvwbk.group03.cardsagainsthumanity.network.gson.ServerCommand;
 
 public class ConfirmJoinGameCommand implements ServerCommand {
 	private Game game;

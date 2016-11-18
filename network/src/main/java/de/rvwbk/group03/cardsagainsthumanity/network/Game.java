@@ -2,7 +2,6 @@ package de.rvwbk.group03.cardsagainsthumanity.network;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Game {
 	
@@ -26,13 +25,8 @@ public class Game {
 		return this.name;
 	}
 	
-	public void setName(final String name) throws IllegalArgumentException,
-	NullPointerException {
-		
-		if (Objects.requireNonNull(name, "name must not be null").isEmpty()) {
-			throw new IllegalArgumentException("name must not be empty");
-		}
-		
+	public void setName(final String name) {
+		this.name = name;
 	}
 	
 	public GameState getGameState() {

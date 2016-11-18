@@ -1,7 +1,6 @@
-package de.rvwbk.group03.cardsagainsthumanity.network.command;
+package de.rvwbk.group03.cardsagainsthumanity.network.command.server;
 
 import de.rvwbk.group03.cardsagainsthumanity.network.InvalidGameMoveReason;
-import de.rvwbk.group03.cardsagainsthumanity.network.gson.ServerCommand;
 
 public class InvalidGameMoveCommand implements ServerCommand {
 	private InvalidGameMoveReason invalidGameMoveReason;

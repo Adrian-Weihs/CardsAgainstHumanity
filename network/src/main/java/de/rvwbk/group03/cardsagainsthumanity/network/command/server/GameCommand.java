@@ -1,4 +1,4 @@
-package de.rvwbk.group03.cardsagainsthumanity.network.command;
+package de.rvwbk.group03.cardsagainsthumanity.network.command.server;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,6 @@ import java.util.List;
 import de.rvwbk.group03.cardsagainsthumanity.network.BlackCard;
 import de.rvwbk.group03.cardsagainsthumanity.network.Game;
 import de.rvwbk.group03.cardsagainsthumanity.network.WhiteCard;
-import de.rvwbk.group03.cardsagainsthumanity.network.gson.ServerCommand;
 
 public class GameCommand implements ServerCommand {
 	private Game game;

@@ -1,8 +1,6 @@
-package de.rvwbk.group03.cardsagainsthumanity.network.command;
+package de.rvwbk.group03.cardsagainsthumanity.network.command.client;
 
-import de.rvwbk.group03.cardsagainsthumanity.network.gson.ClientCommand;
-
-public class JoinGameCommand implements ClientCommand {
+public class JoinGameCommand implements LoggedInClientCommand {
 	private int id;
 	private String joinPassword;
 	

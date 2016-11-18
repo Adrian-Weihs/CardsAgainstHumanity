@@ -1,13 +1,12 @@
-package de.rvwbk.group03.cardsagainsthumanity.network.command;
+package de.rvwbk.group03.cardsagainsthumanity.network.command.client;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.rvwbk.group03.cardsagainsthumanity.network.GameMoveAction;
 import de.rvwbk.group03.cardsagainsthumanity.network.WhiteCard;
-import de.rvwbk.group03.cardsagainsthumanity.network.gson.ClientCommand;
 
-public class GameMoveCommand implements ClientCommand {
+public class GameMoveCommand implements LoggedInClientCommand {
 	private GameMoveAction gameMoveAction;
 	private List<WhiteCard> whiteCards = new ArrayList<>();
 	
