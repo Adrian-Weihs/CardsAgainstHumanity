@@ -5,10 +5,12 @@ import java.util.Objects;
 public class ObjectActionEvent<T> extends AbstractEvent implements ActionEvent {
 	
 	public static final String ACTION_ADD = "add";
-	public static final String ACTION_REMOVE = "remove";
+	public static final String ACTION_DISCONNECT = "disconnect";
+	public static final String ACTION_JOIN = "join";
+	public static final String ACTION_LEAVE = "leave";
 	public static final String ACTION_LOGIN = "login";
 	public static final String ACTION_LOGOUT = "logout";
-	public static final String ACTION_DISCONNECT = "disconnect";
+	public static final String ACTION_REMOVE = "remove";
 	
 	public interface ObjectActionEventListener<T> {
 		
