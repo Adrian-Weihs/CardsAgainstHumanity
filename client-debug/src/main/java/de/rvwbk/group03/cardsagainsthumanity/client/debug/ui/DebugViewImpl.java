@@ -27,12 +27,13 @@ import de.rvwbk.group03.cardsagainsthumanity.client.debug.DebugPresenter;
 import de.rvwbk.group03.cardsagainsthumanity.client.debug.DebugView;
 import de.rvwbk.group03.cardsagainsthumanity.client.debug.component.JComponentOutputStream;
 import de.rvwbk.group03.cardsagainsthumanity.client.debug.component.JComponentOutputStream.JComponentHandler;
-import de.rvwbk.group03.cardsagainsthumanity.network.command.CreateGameCommand;
-import de.rvwbk.group03.cardsagainsthumanity.network.command.GetGameListCommand;
-import de.rvwbk.group03.cardsagainsthumanity.network.command.LoginCommand;
-import de.rvwbk.group03.cardsagainsthumanity.network.command.UpdateGameConfigurationCommand;
-import de.rvwbk.group03.cardsagainsthumanity.network.gson.Command;
-import de.rvwbk.group03.cardsagainsthumanity.network.gson.CommandHelper;
+import de.rvwbk.group03.cardsagainsthumanity.network.command.Command;
+import de.rvwbk.group03.cardsagainsthumanity.network.command.CommandHelper;
+import de.rvwbk.group03.cardsagainsthumanity.network.command.client.CreateGameCommand;
+import de.rvwbk.group03.cardsagainsthumanity.network.command.client.GetGameListCommand;
+import de.rvwbk.group03.cardsagainsthumanity.network.command.client.JoinGameCommand;
+import de.rvwbk.group03.cardsagainsthumanity.network.command.client.LoginCommand;
+import de.rvwbk.group03.cardsagainsthumanity.network.command.client.UpdateGameConfigurationCommand;
 
 public class DebugViewImpl extends JFrame implements DebugView {
 	
@@ -50,6 +51,7 @@ public class DebugViewImpl extends JFrame implements DebugView {
 	private JMenu menuTemplate = new JMenu("Template");
 	private JMenuItem menuItemLogincommand = new JMenuItem("LoginCommand");
 	private JMenuItem menuItemGetGameListCommand = new JMenuItem("GetGameListCommand");
+	private JMenuItem menuItemJoinGameCommand = new JMenuItem("JoinGameCommand");
 	private JMenuItem menuItemCreateGameCommand = new JMenuItem("CreateGameCommand");
 	private JMenuItem menuItemUpdateGameConfigurationCommand = new JMenuItem("UpdateGameConfigurationCommand");
 	
@@ -149,6 +151,8 @@ public class DebugViewImpl extends JFrame implements DebugView {
 		this.menuTemplate.add(this.menuItemGetGameListCommand);
 		this.menuItemGetGameListCommand
 		.addActionListener(event -> this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(new GetGameListCommand(), Command.class)));
+		this.menuItemJoinGameCommand.addActionListener(event -> this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(new JoinGameCommand(), Command.class)));
+		this.menuTemplate.add(this.menuItemJoinGameCommand);
 		this.menuTemplate.add(this.menuItemCreateGameCommand);
 		this.menuItemCreateGameCommand
 		.addActionListener(event -> this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(new CreateGameCommand(), Command.class)));
