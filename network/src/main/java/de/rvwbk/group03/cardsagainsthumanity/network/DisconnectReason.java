@@ -1,8 +1,9 @@
 package de.rvwbk.group03.cardsagainsthumanity.network;
 
 public enum DisconnectReason {
-	UNKOWN,
+	CONNECTION_LOST,
 	DISAGREEMENT,
+	NOT_LOGGED_IN,
 	SHUTDOWN,
-	NOT_LOGGED_IN;
+	UNKOWN;
 }
