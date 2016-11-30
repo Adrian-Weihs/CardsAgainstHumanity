@@ -6,6 +6,7 @@ public class ObjectActionEvent<T> extends AbstractEvent implements ActionEvent {
 	
 	public static final String ACTION_ADD = "add";
 	public static final String ACTION_DISCONNECT = "disconnect";
+	public static final String ACTION_GAME_STATE_CHANGED = "game-state-changed";
 	public static final String ACTION_JOIN = "join";
 	public static final String ACTION_LEAVE = "leave";
 	public static final String ACTION_LOGIN = "login";
@@ -18,7 +19,7 @@ public class ObjectActionEvent<T> extends AbstractEvent implements ActionEvent {
 	}
 	
 	
-	public interface ObjectActionEventNotifier<T> {
+	public interface ObjectActionEventHandler<T> {
 		
 		public void addObjectActionEventListener(ObjectActionEventListener<T> actionEventListener) throws NullPointerException;
 		

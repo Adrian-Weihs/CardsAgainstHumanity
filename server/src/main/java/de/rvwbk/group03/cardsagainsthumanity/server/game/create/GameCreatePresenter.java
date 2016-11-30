@@ -3,6 +3,7 @@ package de.rvwbk.group03.cardsagainsthumanity.server.game.create;
 import java.util.Objects;
 
 import de.rvwbk.group03.cardsagainsthumanity.base.ui.Presenter;
+import de.rvwbk.group03.cardsagainsthumanity.network.Configuration;
 import de.rvwbk.group03.cardsagainsthumanity.server.ServerManager;
 import de.rvwbk.group03.cardsagainsthumanity.server.game.Game;
 
@@ -22,8 +23,8 @@ public class GameCreatePresenter implements Presenter {
 		
 	}
 	
-	public void handleCreateButtonClicked() {
-		Game game = new Game();
+	public void handleCreateButtonClicked(final Configuration configuration) {
+		Game game = new Game(configuration);
 		
 		ServerManager.getManager().getGameManager().addGame(game);
 	}

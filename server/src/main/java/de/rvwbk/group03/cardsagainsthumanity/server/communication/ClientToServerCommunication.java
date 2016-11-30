@@ -25,7 +25,7 @@ import de.rvwbk.group03.cardsagainsthumanity.network.command.client.GetGameListC
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.JoinGameCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.LoggedInClientCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.LoginCommand;
-import de.rvwbk.group03.cardsagainsthumanity.network.command.server.ConfirmJoinGameCommand;
+import de.rvwbk.group03.cardsagainsthumanity.network.command.client.StartGameCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.server.ConfirmLoginCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.server.FailedJoinGameCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.server.FailedLoginCommand;
@@ -91,6 +91,8 @@ public class ClientToServerCommunication extends AbstractBufferedReadCommunicati
 						handleGetGameListCommand((GetGameListCommand) command);
 					} else if (command instanceof JoinGameCommand) {
 						handleJoinGameCommand((JoinGameCommand) command);
+					} else if (command instanceof StartGameCommand) {
+						handleStartGameCommand((StartGameCommand) command);
 					}
 				}
 			} else if (command instanceof LoginCommand) {
@@ -153,14 +155,21 @@ public class ClientToServerCommunication extends AbstractBufferedReadCommunicati
 		
 		try {
 			ServerManager.getManager().getGameManager().joinGame(joinGameCommand.getId(), joinGameCommand.getJoinPassword(), this.clientCommunication.getClient());
-			
-			ConfirmJoinGameCommand confirmJoinGameCommand = new ConfirmJoinGameCommand();
-			this.clientCommunication.getWriteCommunication().writeMessage(CommandHelper.commandToJson(confirmJoinGameCommand));
 		} catch (IllegalArgumentException e) {
 			// TODO: (AW 18.11.2016) Create new exception and get the failedJoinGame
 			FailedJoinGameCommand failedJoinGameCommand = new FailedJoinGameCommand();
-			failedJoinGameCommand.setErrorMessage(FailedJoinGameReason.GAME_NOT_FOUND);
+			failedJoinGameCommand.setFailedJoinGameReason(FailedJoinGameReason.GAME_NOT_FOUND);
 			this.clientCommunication.getWriteCommunication().writeMessage(CommandHelper.commandToJson(failedJoinGameCommand));
+		}
+	}
+	
+	private void handleStartGameCommand(final StartGameCommand startGameCommand) throws NullPointerException {
+		Objects.requireNonNull(startGameCommand, "startGameCommand must not be null");
+		
+		try {
+			ServerManager.getManager().getGameManager().startGame(startGameCommand.getId(), this.clientCommunication.getClient());
+		} catch (IllegalArgumentException e) {
+			LOGGER.info("Could not start the game.", e);
 		}
 	}
 	

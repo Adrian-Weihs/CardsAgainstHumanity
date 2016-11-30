@@ -5,6 +5,7 @@ import java.util.Objects;
 public enum GameTableColumns {
 	ID("#Id:"),
 	NAME("Name:"),
+	CREATOR("Creator"),
 	CURRENT_TO_MAX_PLAYERS("Players:"),
 	STATUS("Status:");
 	

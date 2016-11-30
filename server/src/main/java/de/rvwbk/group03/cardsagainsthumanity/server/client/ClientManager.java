@@ -11,11 +11,11 @@ import org.slf4j.LoggerFactory;
 
 import de.rvwbk.group03.cardsagainsthumanity.base.event.ObjectActionEvent;
 import de.rvwbk.group03.cardsagainsthumanity.base.event.ObjectActionEvent.ObjectActionEventListener;
-import de.rvwbk.group03.cardsagainsthumanity.base.event.ObjectActionEvent.ObjectActionEventNotifier;
+import de.rvwbk.group03.cardsagainsthumanity.base.event.ObjectActionEvent.ObjectActionEventHandler;
 import de.rvwbk.group03.cardsagainsthumanity.server.client.ui.ClientViewImpl;
 import de.rvwbk.group03.cardsagainsthumanity.server.communication.ClientSocketHandler;
 
-public class ClientManager implements ObjectActionEventListener<Client>, ObjectActionEventNotifier<Client> {
+public class ClientManager implements ObjectActionEventListener<Client>, ObjectActionEventHandler<Client> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClientManager.class);
 	
 	private final ClientSocketHandler clientHandler = new ClientSocketHandler();

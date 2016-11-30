@@ -10,7 +10,7 @@ public class FailedJoinGameCommand implements ServerCommand {
 		return this.failedJoinGameReason;
 	}
 	
-	public void setErrorMessage(final FailedJoinGameReason failedJoinGameReason) {
+	public void setFailedJoinGameReason(final FailedJoinGameReason failedJoinGameReason) {
 		this.failedJoinGameReason = failedJoinGameReason;
 	}
 }

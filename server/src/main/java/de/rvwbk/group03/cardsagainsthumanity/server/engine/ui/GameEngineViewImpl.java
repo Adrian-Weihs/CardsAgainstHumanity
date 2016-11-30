@@ -11,6 +11,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,6 +87,7 @@ public class GameEngineViewImpl extends JFrame implements GameEngineView {
 		this.tblAllGames.getTableHeader().setReorderingAllowed(false);
 		this.tblAllGames.setRowSelectionAllowed(true);
 		this.tblAllGames.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		this.tblAllGames.getSelectionModel().addListSelectionListener(event -> gameSelectionChanged(event));
 		this.tblAllGames.setBounds(0, 0, 541, 223);
 		this.tblAllGames.setModel(this.games);
 		
@@ -102,6 +104,7 @@ public class GameEngineViewImpl extends JFrame implements GameEngineView {
 		this.cardsAgainstHumanityServerPane.add(this.btnCreateNewGame);
 		
 		this.btnManageGame = new JButton("Manage Game");
+		this.btnManageGame.addActionListener(event -> manageGameButtonClicked(event));
 		this.btnManageGame.setBounds(454, 269, 169, 23);
 		this.btnManageGame.setEnabled(false);
 		this.cardsAgainstHumanityServerPane.add(this.btnManageGame);
@@ -118,6 +121,18 @@ public class GameEngineViewImpl extends JFrame implements GameEngineView {
 	
 	private void createGameButtonClicked(final ActionEvent event) {
 		this.presenter.handleCreateGameButtonClicked();
+	}
+	
+	private void manageGameButtonClicked(final ActionEvent event) {
+		Game game = getSelectedGame();
+		
+		if (game != null) {
+			this.presenter.handleManageGameButtonClicked(game.getId());
+		}
+	}
+	
+	private void gameSelectionChanged(final ListSelectionEvent event) {
+		this.btnManageGame.setEnabled(this.tblAllGames.getSelectedRow() != -1);
 	}
 	
 	/**

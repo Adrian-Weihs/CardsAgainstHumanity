@@ -3,6 +3,7 @@ package de.rvwbk.group03.cardsagainsthumanity.network;
 import java.util.Objects;
 
 public class Player {
+	public final static Player SERVER = new Player(-1, "<Server>");
 	
 	private int id;
 	private String name;
@@ -10,6 +11,14 @@ public class Player {
 	private boolean zar;
 	private PlayerState playerState = PlayerState.WAITING;
 	
+	public Player() {
+		
+	}
+	
+	private Player(final int id, final String name) {
+		this.id = id;
+		this.name = name;
+	}
 	
 	public int getId() {
 		return this.id;

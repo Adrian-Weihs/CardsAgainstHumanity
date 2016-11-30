@@ -26,24 +26,30 @@ public class GameTableModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(final int rowIndex, final int columnIndex) {
 		Game game = this.games.get(rowIndex);
-		switch(columnIndex) {
+		switch (columnIndex) {
 			case 0:
 				return game.getId();
 			case 1:
 				return game.getName();
 			case 2:
-				return game.getPlayerManager().getPlayers().size() + "/" + game.getConfiguration().getMaxNumberOfPlayers();
+				if (game.getCreator() != null) {
+					return game.getCreator().getName();
+				}
+				return "<Server>";
 			case 3:
+				return game.getPlayerManager().getPlayers().size() + "/" + game.getConfiguration().getMaxNumberOfPlayers();
+			case 4:
 				return game.getGameState();
 			default:
 				return null;
 		}
 	}
+	
 	@Override
 	public String getColumnName(final int column) {
 		GameTableColumns[] columns = GameTableColumns.values();
 		
-		if(column <= GameTableColumns.values().length) {
+		if (column <= GameTableColumns.values().length) {
 			return columns[column].getColumnName();
 		}
 		
