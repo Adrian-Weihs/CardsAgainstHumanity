@@ -15,13 +15,13 @@ import de.rvwbk.group03.cardsagainsthumanity.network.command.CommandHelper;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.server.DisconnectCommand;
 import de.rvwbk.group03.cardsagainsthumanity.server.ServerManager;
 import de.rvwbk.group03.cardsagainsthumanity.server.communication.ClientCommunication;
-import de.rvwbk.group03.cardsagainsthumanity.server.game.Game;
+import de.rvwbk.group03.cardsagainsthumanity.server.game.Competition;
 
 public class Client {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Client.class);
 	
 	private final ClientCommunication clientCommunication;
-	private final List<Game> games = new ArrayList<>();
+	private final List<Competition> games = new ArrayList<>();
 	private User user;
 	
 	public Client(final ClientCommunication clientCommunication) throws NullPointerException {
@@ -36,11 +36,11 @@ public class Client {
 		return this.user;
 	}
 	
-	public void addGame(final Game game) throws NullPointerException {
+	public void addGame(final Competition game) throws NullPointerException {
 		this.games.add(Objects.requireNonNull(game, "game must not be null"));
 	}
 	
-	public boolean removeGame(final Game game) throws NullPointerException {
+	public boolean removeGame(final Competition game) throws NullPointerException {
 		return this.games.remove(Objects.requireNonNull(game, "game must not be null"));
 	}
 	

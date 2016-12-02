@@ -2,9 +2,6 @@ package de.rvwbk.group03.cardsagainsthumanity.server.communication;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 import org.slf4j.Logger;
@@ -16,11 +13,11 @@ import de.rvwbk.group03.cardsagainsthumanity.base.exception.WrongUserNameOrPassw
 import de.rvwbk.group03.cardsagainsthumanity.base.network.AbstractBufferedReadCommunication;
 import de.rvwbk.group03.cardsagainsthumanity.network.FailedJoinGameReason;
 import de.rvwbk.group03.cardsagainsthumanity.network.FailedLoginReason;
-import de.rvwbk.group03.cardsagainsthumanity.network.Game;
 import de.rvwbk.group03.cardsagainsthumanity.network.InvalidMessageReason;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.Command;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.CommandHelper;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.ClientCommand;
+import de.rvwbk.group03.cardsagainsthumanity.network.command.client.CreateGameCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.GetGameListCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.JoinGameCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.LoggedInClientCommand;
@@ -32,6 +29,7 @@ import de.rvwbk.group03.cardsagainsthumanity.network.command.server.FailedLoginC
 import de.rvwbk.group03.cardsagainsthumanity.network.command.server.GameListCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.server.InvalidMessageCommand;
 import de.rvwbk.group03.cardsagainsthumanity.server.ServerManager;
+import de.rvwbk.group03.cardsagainsthumanity.server.game.Competition;
 
 
 public class ClientToServerCommunication extends AbstractBufferedReadCommunication {
@@ -93,6 +91,8 @@ public class ClientToServerCommunication extends AbstractBufferedReadCommunicati
 						handleJoinGameCommand((JoinGameCommand) command);
 					} else if (command instanceof StartGameCommand) {
 						handleStartGameCommand((StartGameCommand) command);
+					} else if (command instanceof CreateGameCommand) {
+						handleCreateGameCommand((CreateGameCommand) command);
 					}
 				}
 			} else if (command instanceof LoginCommand) {
@@ -131,21 +131,8 @@ public class ClientToServerCommunication extends AbstractBufferedReadCommunicati
 	private void handleGetGameListCommand(final GetGameListCommand getGameListCommand) throws NullPointerException {
 		Objects.requireNonNull(getGameListCommand, "getGameListCommand must not be null");
 		
-		List<Game> games = new ArrayList<>();
-		for (de.rvwbk.group03.cardsagainsthumanity.server.game.Game game : ServerManager.getManager().getGameManager().getGames()) {
-			Game tmp = new Game();
-			tmp.setId(game.getId());
-			tmp.setName(game.getName());
-			tmp.setCreator(null);
-			tmp.setNumberOfPlayers(game.getPlayerManager().getPlayers().size());
-			tmp.setPlayers(Collections.emptyList());
-			tmp.setConfiguration(null);
-			
-			games.add(tmp);
-		}
-		
 		GameListCommand gameListCommand = new GameListCommand();
-		gameListCommand.setGames(games);
+		gameListCommand.setGames(ServerCommandHelper.toGames(ServerManager.getManager().getGameManager().getGames(), false, false));
 		
 		this.clientCommunication.getWriteCommunication().writeMessage(CommandHelper.commandToJson(gameListCommand));
 	}
@@ -160,6 +147,19 @@ public class ClientToServerCommunication extends AbstractBufferedReadCommunicati
 			FailedJoinGameCommand failedJoinGameCommand = new FailedJoinGameCommand();
 			failedJoinGameCommand.setFailedJoinGameReason(FailedJoinGameReason.GAME_NOT_FOUND);
 			this.clientCommunication.getWriteCommunication().writeMessage(CommandHelper.commandToJson(failedJoinGameCommand));
+		}
+	}
+	
+	private void handleCreateGameCommand(final CreateGameCommand createGameCommand) throws NullPointerException {
+		Objects.requireNonNull(createGameCommand, "createGameCommand must not be null");
+		
+		// TODO: (AW 02.12.2016) Check is not in game!
+		
+		try {
+			ServerManager.getManager().getGameManager().addGame(new Competition(ClientCommandHelper.toGameConfiguration(createGameCommand.getConfiguration())));
+		} catch (IllegalArgumentException e) {
+			// TODO: (AW 02.12.2016) Create and throw a FailedCreateGameCommand
+			LOGGER.info("Got create Game Command");
 		}
 	}
 	

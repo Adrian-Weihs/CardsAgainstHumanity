@@ -10,23 +10,23 @@ import de.rvwbk.group03.cardsagainsthumanity.base.event.ObjectActionEvent;
 import de.rvwbk.group03.cardsagainsthumanity.base.event.ObjectActionEvent.ObjectActionEventHandler;
 import de.rvwbk.group03.cardsagainsthumanity.base.event.ObjectActionEvent.ObjectActionEventListener;
 import de.rvwbk.group03.cardsagainsthumanity.base.util.Strings;
-import de.rvwbk.group03.cardsagainsthumanity.network.Configuration;
 import de.rvwbk.group03.cardsagainsthumanity.network.GameState;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.CommandHelper;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.server.GameCommand;
 import de.rvwbk.group03.cardsagainsthumanity.server.client.Client;
 import de.rvwbk.group03.cardsagainsthumanity.server.communication.ServerCommandHelper;
+import de.rvwbk.group03.cardsagainsthumanity.server.game.configuration.GameConfiguration;
 import de.rvwbk.group03.cardsagainsthumanity.server.game.event.GameAction;
 import de.rvwbk.group03.cardsagainsthumanity.server.game.event.GameActionEvent;
 import de.rvwbk.group03.cardsagainsthumanity.server.game.event.GameActionEventHandler;
 import de.rvwbk.group03.cardsagainsthumanity.server.game.event.GameActionEventListener;
-import de.rvwbk.group03.cardsagainsthumanity.server.game.object.Player;
+import de.rvwbk.group03.cardsagainsthumanity.server.game.object.GamePlayer;
 
 /**
  * 
  * @author Adrian Weihs
  */
-public class Game implements GameActionEventHandler, ObjectActionEventListener<Game>, ObjectActionEventHandler<Game> {
+public class Competition implements GameActionEventHandler, ObjectActionEventListener<Competition>, ObjectActionEventHandler<Competition> {
 	
 	private static AtomicInteger count = new AtomicInteger(0);
 	
@@ -34,34 +34,38 @@ public class Game implements GameActionEventHandler, ObjectActionEventListener<G
 	private static final int GAME_START_DELAY = 5000;
 	private static final int GAME_ACTION_DELAY = 1000;
 	
-	private final Collection<ObjectActionEventListener<Game>> objectActionEventlisteners = new CopyOnWriteArrayList<>();
+	private final Collection<ObjectActionEventListener<Competition>> objectActionEventlisteners = new CopyOnWriteArrayList<>();
 	private final Collection<GameActionEventListener> gameActionEventlisteners = new CopyOnWriteArrayList<>();
 	private final ReentrantLock gameLock = new ReentrantLock();
 	private final PlayerManager playerManager = new PlayerManager();
+	private final CardManager cardManager = new CardManager();
 	private final int id;
 	
-	private Configuration configuration;
-	private Player creator;
+	private GameConfiguration configuration;
+	private GamePlayer creator;
+	private int round = 1;
 	
 	
 	private GameState gameState = GameState.LOBBY;
 	
 	
-	public Game(final Configuration configuration) throws NullPointerException {
+	public Competition(final GameConfiguration configuration) throws NullPointerException {
 		this(configuration, null);
 	}
 	
-	public Game(final Configuration configuration, final Player creator) throws NullPointerException {
+	public Competition(final GameConfiguration configuration, final Client client) throws NullPointerException {
 		this.configuration = Objects.requireNonNull(configuration, "configuration must not be null");
-		this.creator = creator;
 		this.id = count.incrementAndGet();
+		if (client != null) {
+			join(client);
+		}
 	}
 	
 	public int getId() {
 		return this.id;
 	}
 	
-	public Player getCreator() {
+	public GamePlayer getCreator() {
 		return this.creator;
 	}
 	
@@ -86,6 +90,10 @@ public class Game implements GameActionEventHandler, ObjectActionEventListener<G
 		return this.configuration.getName();
 	}
 	
+	public int getRound() {
+		return this.round;
+	}
+	
 	public void join(final Client client, final String joinPassword) {
 		this.gameLock.lock();
 		if (!Strings.nullToEmpty(joinPassword).equals(this.configuration.getJoinPassword())) {
@@ -104,7 +112,24 @@ public class Game implements GameActionEventHandler, ObjectActionEventListener<G
 		}
 		// TODO: (AW 18.11.2016) Kicked player doesnt allowed to join again!
 		
-		Player player = new Player(client, this);
+		GamePlayer player = new GamePlayer(client, this);
+		this.playerManager.addPlayer(player);
+		if (this.creator == null) {
+			updateCreator();
+		}
+		
+		fireGameActionEvent(new GameActionEvent(this, this, GameAction.PLAYER_JOIN));
+		
+		client.addGame(this);
+		
+		fireGameCommand();
+		this.gameLock.unlock();
+	}
+	
+	private void join(final Client client) {
+		this.gameLock.lock();
+		
+		GamePlayer player = new GamePlayer(client, this);
 		this.playerManager.addPlayer(player);
 		if (this.creator == null) {
 			updateCreator();
@@ -121,7 +146,7 @@ public class Game implements GameActionEventHandler, ObjectActionEventListener<G
 	public void leave(final Client client) {
 		this.gameLock.lock();
 		
-		Player player = this.playerManager.getPlayer(client);
+		GamePlayer player = this.playerManager.getPlayer(client);
 		
 		if (player != null) {
 			this.playerManager.removePlayer(player);
@@ -166,36 +191,36 @@ public class Game implements GameActionEventHandler, ObjectActionEventListener<G
 	
 	private void fireGameCommand() {
 		GameCommand gameCommand = new GameCommand();
-		gameCommand.setGame(ServerCommandHelper.toNetworkGame(this, true));
+		gameCommand.setGame(ServerCommandHelper.toGame(this, true, false));
 		
 		this.playerManager.getPlayers().forEach(player -> player.getClient().getClientCommunication().getWriteCommunication().writeMessage(CommandHelper.commandToJson(gameCommand)));
 	}
 	
-	public Configuration getConfiguration() {
+	public GameConfiguration getConfiguration() {
 		return this.configuration;
 	}
 	
-	private void setConfiguration(final Configuration configuration) {
+	private void setConfiguration(final GameConfiguration configuration) {
 		this.configuration = Objects.requireNonNull(configuration, "configuration must not be null");
 		fireGameActionEvent(new GameActionEvent(this, this, GameAction.GAME_CONFIGURATION_CHANGED));
 	}
 	
-	private void fireObjectActionEvent(final ObjectActionEvent<Game> event) throws NullPointerException {
+	private void fireObjectActionEvent(final ObjectActionEvent<Competition> event) throws NullPointerException {
 		this.objectActionEventlisteners.forEach(listener -> listener.handleObjectActionEvent(Objects.requireNonNull(event, "event must not be null")));
 	}
 	
 	@Override
-	public void addObjectActionEventListener(final ObjectActionEventListener<Game> actionEventListener) throws NullPointerException {
+	public void addObjectActionEventListener(final ObjectActionEventListener<Competition> actionEventListener) throws NullPointerException {
 		this.objectActionEventlisteners.add(Objects.requireNonNull(actionEventListener, "actionEventListener must not be null"));
 	}
 	
 	@Override
-	public boolean removeObjectActionEventListener(final ObjectActionEventListener<Game> actionEventListener) throws NullPointerException {
+	public boolean removeObjectActionEventListener(final ObjectActionEventListener<Competition> actionEventListener) throws NullPointerException {
 		return this.objectActionEventlisteners.remove(Objects.requireNonNull(actionEventListener, "actionEventListener must not be null"));
 	}
 	
 	@Override
-	public void handleObjectActionEvent(final ObjectActionEvent<Game> objectActionEvent) throws NullPointerException {
+	public void handleObjectActionEvent(final ObjectActionEvent<Competition> objectActionEvent) throws NullPointerException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -212,5 +237,9 @@ public class Game implements GameActionEventHandler, ObjectActionEventListener<G
 	@Override
 	public boolean removeGameActionEventListener(final GameActionEventListener listener) throws NullPointerException {
 		return this.gameActionEventlisteners.remove(Objects.requireNonNull(listener, "listener must not be null"));
+	}
+	
+	public CardManager getCardManager() {
+		return this.cardManager;
 	}
 }

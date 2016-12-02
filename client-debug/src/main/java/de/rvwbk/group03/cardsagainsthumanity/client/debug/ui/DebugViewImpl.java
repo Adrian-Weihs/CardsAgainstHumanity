@@ -26,6 +26,7 @@ import de.rvwbk.group03.cardsagainsthumanity.client.debug.DebugPresenter;
 import de.rvwbk.group03.cardsagainsthumanity.client.debug.DebugView;
 import de.rvwbk.group03.cardsagainsthumanity.client.debug.component.JComponentOutputStream;
 import de.rvwbk.group03.cardsagainsthumanity.client.debug.component.JComponentOutputStream.JComponentHandler;
+import de.rvwbk.group03.cardsagainsthumanity.network.Configuration;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.Command;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.CommandHelper;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.CreateGameCommand;
@@ -154,8 +155,11 @@ public class DebugViewImpl extends JFrame implements DebugView {
 		this.menuTemplate.add(this.menuItemJoinGameCommand);
 		this.menuItemStartGameCommand.addActionListener(event -> this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(new StartGameCommand(), Command.class)));
 		this.menuTemplate.add(this.menuItemStartGameCommand);
-		this.menuItemCreateGameCommand
-		.addActionListener(event -> this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(new CreateGameCommand(), Command.class)));
+		this.menuItemCreateGameCommand.addActionListener(event -> {
+			CreateGameCommand command = new CreateGameCommand();
+			command.setConfiguration(new Configuration());
+			this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(command, Command.class));
+		});
 		this.menuTemplate.add(this.menuItemCreateGameCommand);
 		this.menuItemUpdateGameConfigurationCommand.addActionListener(
 				event -> this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(new UpdateGameConfigurationCommand(), Command.class)));

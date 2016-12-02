@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import de.rvwbk.group03.cardsagainsthumanity.server.engine.GameEnginePresenter;
 import de.rvwbk.group03.cardsagainsthumanity.server.engine.GameEngineView;
-import de.rvwbk.group03.cardsagainsthumanity.server.game.Game;
+import de.rvwbk.group03.cardsagainsthumanity.server.game.Competition;
 
 /**
  * The Graphical User Interface, which shows all games, but also games by its status. The user can select one game from
@@ -124,7 +124,7 @@ public class GameEngineViewImpl extends JFrame implements GameEngineView {
 	}
 	
 	private void manageGameButtonClicked(final ActionEvent event) {
-		Game game = getSelectedGame();
+		Competition game = getSelectedGame();
 		
 		if (game != null) {
 			this.presenter.handleManageGameButtonClicked(game.getId());
@@ -150,11 +150,11 @@ public class GameEngineViewImpl extends JFrame implements GameEngineView {
 	 * 
 	 * @return The selected game. May be {@code null} to indicate that there is no game selected.
 	 */
-	public Game getSelectedGame() {
+	public Competition getSelectedGame() {
 		int row = this.tblAllGames.getSelectedRow();
 		
 		if(row != -1) {
-			Game game = this.games.getGame(row);
+			Competition game = this.games.getGame(row);
 			
 			if(game != null) {
 				return game;
@@ -170,17 +170,17 @@ public class GameEngineViewImpl extends JFrame implements GameEngineView {
 	}
 	
 	@Override
-	public void addGame(final Game game) throws NullPointerException {
+	public void addGame(final Competition game) throws NullPointerException {
 		this.games.addGame(Objects.requireNonNull(game, "game must not be null"));
 	}
 	
 	@Override
-	public void updateGame(final Game game) throws NullPointerException {
+	public void updateGame(final Competition game) throws NullPointerException {
 		this.games.updateGame(Objects.requireNonNull(game, "game must not be null"));
 	}
 	
 	@Override
-	public void removeGame(final Game game) throws NullPointerException {
+	public void removeGame(final Competition game) throws NullPointerException {
 		this.games.removeGame(Objects.requireNonNull(game, "game must not be null"));
 	}
 }

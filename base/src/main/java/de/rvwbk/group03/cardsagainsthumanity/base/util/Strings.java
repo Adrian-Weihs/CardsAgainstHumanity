@@ -77,7 +77,7 @@ public class Strings {
 		Objects.requireNonNull(name, "name must not be null");
 		
 		if (Objects.requireNonNull(string, name + " must not be null").isEmpty()) {
-			throw new IllegalArgumentException(name + "must not be empty");
+			throw new IllegalArgumentException(name + " must not be empty");
 		}
 		
 		return string;

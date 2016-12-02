@@ -6,17 +6,17 @@ import java.util.Objects;
 
 import de.rvwbk.group03.cardsagainsthumanity.network.PlayerState;
 import de.rvwbk.group03.cardsagainsthumanity.server.client.Client;
-import de.rvwbk.group03.cardsagainsthumanity.server.game.Game;
+import de.rvwbk.group03.cardsagainsthumanity.server.game.Competition;
 
 /**
  * The player class to play a game.
  * 
  * @author Adrian Weihs
  */
-public class Player {
+public class GamePlayer {
 	
 	private Client client;
-	private Game game;
+	private Competition game;
 	
 	private PlayerState playerState = PlayerState.WAITING;
 	
@@ -30,7 +30,7 @@ public class Player {
 	 * @param game The game this player belongs to. Must not be {@code null}.
 	 * @throws NullPointerException If {@code client} or {@code game} is {@code null}.
 	 */
-	public Player(final Client client, final Game game) throws NullPointerException {
+	public GamePlayer(final Client client, final Competition game) throws NullPointerException {
 		this.client = Objects.requireNonNull(client, "client must not be null");
 		this.game = Objects.requireNonNull(game, "game must not be null");
 	}

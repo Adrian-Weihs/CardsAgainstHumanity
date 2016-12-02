@@ -15,19 +15,19 @@ import de.rvwbk.group03.cardsagainsthumanity.server.game.event.GameActionEvent;
 import de.rvwbk.group03.cardsagainsthumanity.server.game.event.GameActionEventHandler;
 import de.rvwbk.group03.cardsagainsthumanity.server.game.event.GameActionEventListener;
 import de.rvwbk.group03.cardsagainsthumanity.server.game.manage.ui.GameManageViewImpl;
-import de.rvwbk.group03.cardsagainsthumanity.server.game.object.Player;
+import de.rvwbk.group03.cardsagainsthumanity.server.game.object.GamePlayer;
 
 public class GameManager implements GameActionEventListener, GameActionEventHandler {
 	
 	private final Collection<GameActionEventListener> gameActionListeners = new CopyOnWriteArrayList<>();
-	private final Map<Integer, Game> games = new HashMap<>();
+	private final Map<Integer, Competition> games = new HashMap<>();
 	
 	
-	public Game getGame(final int id) {
+	public Competition getGame(final int id) {
 		return this.games.get(id);
 	}
 	
-	public Collection<Game> getGames() {
+	public Collection<Competition> getGames() {
 		return Collections.unmodifiableCollection(this.games.values());
 	}
 	
@@ -43,7 +43,7 @@ public class GameManager implements GameActionEventListener, GameActionEventHand
 		view.setVisible(true);
 	}
 	
-	public void addGame(final Game game) throws NullPointerException {
+	public void addGame(final Competition game) throws NullPointerException {
 		Objects.requireNonNull(game, "game must not be null");
 		
 		this.games.put(game.getId(), game);
@@ -54,7 +54,7 @@ public class GameManager implements GameActionEventListener, GameActionEventHand
 	public void joinGame(final int id, final String joinPassword, final Client client) throws IllegalArgumentException, NullPointerException {
 		Objects.requireNonNull(client, "client must not be null");
 		
-		Game game = getGame(id);
+		Competition game = getGame(id);
 		
 		if (game == null) {
 			throw new IllegalArgumentException("Game with the given id not found.");
@@ -72,7 +72,7 @@ public class GameManager implements GameActionEventListener, GameActionEventHand
 	public void startGame(final int id, final Client client) throws NullPointerException {
 		Objects.requireNonNull(client, "client must not be null");
 		
-		Game game = getGame(id);
+		Competition game = getGame(id);
 		
 		if (game == null) {
 			throw new IllegalArgumentException("Game with the given id not found.");
@@ -82,7 +82,7 @@ public class GameManager implements GameActionEventListener, GameActionEventHand
 			throw new IllegalArgumentException("Game with the ginven id already started or finished.");
 		}
 		
-		Player player = game.getPlayerManager().getPlayer(client);
+		GamePlayer player = game.getPlayerManager().getPlayer(client);
 		
 		if(player == null) {
 			throw new IllegalArgumentException("You are not a Player of this game.");

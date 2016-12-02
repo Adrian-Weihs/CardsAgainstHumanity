@@ -3,8 +3,12 @@ package de.rvwbk.group03.cardsagainsthumanity.network;
 import de.rvwbk.group03.cardsagainsthumanity.base.util.Strings;
 
 public class Configuration {
+	public static final int MIN_PLAYERS = 3;
+	public static final int MAX_PLAYERS = 8;
+	
 	private String name = Strings.EMPTY;
 	private String joinPassword = Strings.EMPTY;
+	private boolean passwordProtected;
 	private String cardDeckName = "default";
 	private int maxNumberOfPlayer = 6;
 	
@@ -31,6 +35,14 @@ public class Configuration {
 	
 	public void setJoinPassword(final String joinPassword) {
 		this.joinPassword = joinPassword;
+	}
+	
+	public boolean isPasswordProtcted() {
+		return this.passwordProtected;
+	}
+	
+	public void setPasswordProtected(final boolean passwordPotected) {
+		this.passwordProtected = passwordPotected;
 	}
 	
 	public String getName() {

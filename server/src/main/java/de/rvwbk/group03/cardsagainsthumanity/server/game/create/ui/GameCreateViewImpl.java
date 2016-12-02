@@ -2,6 +2,7 @@ package de.rvwbk.group03.cardsagainsthumanity.server.game.create.ui;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -11,20 +12,29 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 
 import de.rvwbk.group03.cardsagainsthumanity.network.Configuration;
+import de.rvwbk.group03.cardsagainsthumanity.server.game.configuration.GameConfiguration;
+import de.rvwbk.group03.cardsagainsthumanity.server.game.configuration.OutOfCardsWinningConndition;
 import de.rvwbk.group03.cardsagainsthumanity.server.game.create.GameCreatePresenter;
 import de.rvwbk.group03.cardsagainsthumanity.server.game.create.GameCreateView;
 
 public class GameCreateViewImpl extends JFrame implements GameCreateView {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GameCreateViewImpl.class);
+	
+	private static AtomicInteger COUNT = new AtomicInteger(1);
 	
 	private final GameCreatePresenter presenter;
 	
 	private JButton createButton = new JButton("Create");
+	private JButton cancelButton = new JButton("Cancel");
 	private JTextField nameTextField;
 	private JTextField joinPasswordTextField;
 	private JTextField textField_2;
@@ -32,6 +42,7 @@ public class GameCreateViewImpl extends JFrame implements GameCreateView {
 	private JComboBox<String> cardDeckNamecomboBox = new JComboBox<>();
 	
 	private JSlider maxPlayersSlider = new JSlider();
+	
 	
 	public GameCreateViewImpl() {
 		this.presenter = new GameCreatePresenter(this);
@@ -44,15 +55,15 @@ public class GameCreateViewImpl extends JFrame implements GameCreateView {
 		setTitle("Create Game");
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setSize(460, 450);
-		this.createButton.setBounds(341, 377, 89, 23);
-		
-		this.createButton.addActionListener(event -> createButtonClicked(event));
 		getContentPane().setLayout(null);
+		
+		this.createButton.setBounds(341, 377, 89, 23);
+		this.createButton.addActionListener(this::createButtonClicked);
 		getContentPane().add(this.createButton);
 		
-		JButton btnNewButton = new JButton("Cancel");
-		btnNewButton.setBounds(10, 377, 89, 23);
-		getContentPane().add(btnNewButton);
+		this.cancelButton.setBounds(10, 377, 89, 23);
+		this.cancelButton.addActionListener(this::cancelButtonClicked);
+		getContentPane().add(this.cancelButton);
 		
 		JPanel panel = new JPanel();
 		panel.setBounds(10, 11, 420, 359);
@@ -63,7 +74,7 @@ public class GameCreateViewImpl extends JFrame implements GameCreateView {
 				FormSpecs.RELATED_GAP_COLSPEC,
 				FormSpecs.DEFAULT_COLSPEC,
 				FormSpecs.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"),},
+				ColumnSpec.decode("default:grow"), },
 				new RowSpec[] {
 						FormSpecs.RELATED_GAP_ROWSPEC,
 						FormSpecs.DEFAULT_ROWSPEC,
@@ -84,7 +95,7 @@ public class GameCreateViewImpl extends JFrame implements GameCreateView {
 						FormSpecs.RELATED_GAP_ROWSPEC,
 						FormSpecs.DEFAULT_ROWSPEC,
 						FormSpecs.RELATED_GAP_ROWSPEC,
-						FormSpecs.DEFAULT_ROWSPEC,}));
+						FormSpecs.DEFAULT_ROWSPEC, }));
 		
 		JLabel lblConfiguration = new JLabel("Configuration");
 		lblConfiguration.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -98,6 +109,7 @@ public class GameCreateViewImpl extends JFrame implements GameCreateView {
 		panel.add(lblName, "2, 6");
 		
 		this.nameTextField = new JTextField();
+		this.nameTextField.setText("Server game " + COUNT.get());
 		panel.add(this.nameTextField, "6, 6, fill, default");
 		this.nameTextField.setColumns(10);
 		
@@ -123,8 +135,8 @@ public class GameCreateViewImpl extends JFrame implements GameCreateView {
 		this.maxPlayersSlider.setMajorTickSpacing(1);
 		this.maxPlayersSlider.setPaintLabels(true);
 		this.maxPlayersSlider.setValue(6);
-		this.maxPlayersSlider.setMinimum(3);
-		this.maxPlayersSlider.setMaximum(8);
+		this.maxPlayersSlider.setMinimum(Configuration.MIN_PLAYERS);
+		this.maxPlayersSlider.setMaximum(Configuration.MAX_PLAYERS);
 		
 		JLabel lblWinningCondition = new JLabel("Winning Condition");
 		lblWinningCondition.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -146,13 +158,24 @@ public class GameCreateViewImpl extends JFrame implements GameCreateView {
 		this.textField_3.setColumns(10);
 	}
 	
+	private void cancelButtonClicked(final ActionEvent event) {
+		dispose();
+	}
+	
 	private void createButtonClicked(final ActionEvent event) {
-		Configuration config = new Configuration();
-		config.setName(this.nameTextField.getText());
-		config.setJoinPassword(this.joinPasswordTextField.getText());
-		config.setMaxNumberOfPlayer(this.maxPlayersSlider.getValue());
-		config.setCardDeckName(this.cardDeckNamecomboBox.getSelectedItem().toString());
-		this.presenter.handleCreateButtonClicked(config);
+		GameConfiguration config = new GameConfiguration();
+		try {
+			config.setName(this.nameTextField.getText());
+			config.setJoinPassword(this.joinPasswordTextField.getText());
+			config.setMaxNumberOfPlayer(this.maxPlayersSlider.getValue());
+			config.setCardDeckName(this.cardDeckNamecomboBox.getSelectedItem().toString());
+			config.addWinningCondition(new OutOfCardsWinningConndition());
+			this.presenter.handleCreateButtonClicked(config);
+			COUNT.incrementAndGet();
+			dispose();
+		} catch (IllegalArgumentException e) {
+			LOGGER.error("Could not create a Game.", e);
+		}
 	}
 	
 	@Override

@@ -4,12 +4,12 @@ import java.util.Objects;
 
 import de.rvwbk.group03.cardsagainsthumanity.base.ui.Presenter;
 import de.rvwbk.group03.cardsagainsthumanity.server.ServerManager;
-import de.rvwbk.group03.cardsagainsthumanity.server.game.Game;
+import de.rvwbk.group03.cardsagainsthumanity.server.game.Competition;
 
 public class GameManagePresenter implements Presenter {
 	
 	private final GameManageView view;
-	private Game currentGame;
+	private Competition currentGame;
 	
 	
 	public GameManagePresenter(final GameManageView view) {

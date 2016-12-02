@@ -2,7 +2,7 @@ package de.rvwbk.group03.cardsagainsthumanity.server.game.manage.ui;
 
 import javax.swing.JFrame;
 
-import de.rvwbk.group03.cardsagainsthumanity.server.game.Game;
+import de.rvwbk.group03.cardsagainsthumanity.server.game.Competition;
 import de.rvwbk.group03.cardsagainsthumanity.server.game.manage.GameManagePresenter;
 import de.rvwbk.group03.cardsagainsthumanity.server.game.manage.GameManageView;
 
@@ -33,7 +33,7 @@ public class GameManageViewImpl extends JFrame implements GameManageView {
 	}
 	
 	@Override
-	public void setGame(final Game game) {
+	public void setGame(final Competition game) {
 		// TODO Auto-generated method stub
 		
 	}

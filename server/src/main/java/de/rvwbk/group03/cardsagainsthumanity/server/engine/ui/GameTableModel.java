@@ -6,11 +6,11 @@ import java.util.Objects;
 
 import javax.swing.table.AbstractTableModel;
 
-import de.rvwbk.group03.cardsagainsthumanity.server.game.Game;
+import de.rvwbk.group03.cardsagainsthumanity.server.game.Competition;
 
 public class GameTableModel extends AbstractTableModel {
 	
-	private List<Game> games = new ArrayList<>();
+	private List<Competition> games = new ArrayList<>();
 	
 	
 	@Override
@@ -25,7 +25,7 @@ public class GameTableModel extends AbstractTableModel {
 	
 	@Override
 	public Object getValueAt(final int rowIndex, final int columnIndex) {
-		Game game = this.games.get(rowIndex);
+		Competition game = this.games.get(rowIndex);
 		switch (columnIndex) {
 			case 0:
 				return game.getId();
@@ -56,17 +56,17 @@ public class GameTableModel extends AbstractTableModel {
 		return "<Unkown>";
 	}
 	
-	public void addGame(final Game game) throws NullPointerException {
+	public void addGame(final Competition game) throws NullPointerException {
 		this.games.add(Objects.requireNonNull(game, "game must not be null"));
 		fireTableRowsInserted(this.games.size() - 1, this.games.size() - 1);
 	}
 	
-	public void removeGame(final Game game) throws NullPointerException {
+	public void removeGame(final Competition game) throws NullPointerException {
 		this.games.remove(Objects.requireNonNull(game, "game must not be null"));
 		fireTableRowsDeleted(this.games.size(), this.games.size());
 	}
 	
-	public void updateGame(final Game game) throws NullPointerException {
+	public void updateGame(final Competition game) throws NullPointerException {
 		int row = this.games.indexOf(game);
 		
 		if (row != -1) {
@@ -74,7 +74,7 @@ public class GameTableModel extends AbstractTableModel {
 		}
 	}
 	
-	public Game getGame(final int row) {
+	public Competition getGame(final int row) {
 		return this.games.get(row);
 	}
 }
