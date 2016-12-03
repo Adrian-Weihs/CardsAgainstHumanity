@@ -126,14 +126,17 @@ public class Competition implements GameActionEventHandler, ObjectActionEventLis
 		this.gameLock.unlock();
 	}
 	
-	private void join(final Client client) {
+	public void join(final Client client) throws IllegalArgumentException {
 		this.gameLock.lock();
+		GamePlayer player = this.playerManager.getPlayer(client);
 		
-		GamePlayer player = new GamePlayer(client, this);
-		this.playerManager.addPlayer(player);
-		if (this.creator == null) {
-			updateCreator();
+		if(player != null) {
+			throw new IllegalArgumentException("Client is already in this game");
 		}
+		
+		player = new GamePlayer(client, this);
+		this.playerManager.addPlayer(player);
+		this.creator = player;
 		
 		fireGameActionEvent(new GameActionEvent(this, this, GameAction.PLAYER_JOIN));
 		
@@ -143,10 +146,14 @@ public class Competition implements GameActionEventHandler, ObjectActionEventLis
 		this.gameLock.unlock();
 	}
 	
-	public void leave(final Client client) {
+	public void leave(final Client client) throws IllegalArgumentException {
 		this.gameLock.lock();
 		
 		GamePlayer player = this.playerManager.getPlayer(client);
+		
+		if(player == null) {
+			throw new IllegalArgumentException("Client is not in this game");
+		}
 		
 		if (player != null) {
 			this.playerManager.removePlayer(player);
@@ -156,9 +163,9 @@ public class Competition implements GameActionEventHandler, ObjectActionEventLis
 			
 			client.removeGame(this);
 			fireGameActionEvent(new GameActionEvent(this, this, GameAction.PLAYER_LEFT));
+			fireGameCommand();
 		}
 		
-		fireGameCommand();
 		this.gameLock.unlock();
 	}
 	

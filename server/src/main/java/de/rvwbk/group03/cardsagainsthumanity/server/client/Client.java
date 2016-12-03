@@ -36,6 +36,10 @@ public class Client {
 		return this.user;
 	}
 	
+	public boolean hasGame() {
+		return !this.games.isEmpty();
+	}
+	
 	public void addGame(final Competition game) throws NullPointerException {
 		this.games.add(Objects.requireNonNull(game, "game must not be null"));
 	}

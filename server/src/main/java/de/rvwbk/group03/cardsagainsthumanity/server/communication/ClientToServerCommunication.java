@@ -11,22 +11,31 @@ import com.google.gson.JsonSyntaxException;
 
 import de.rvwbk.group03.cardsagainsthumanity.base.exception.WrongUserNameOrPasswordException;
 import de.rvwbk.group03.cardsagainsthumanity.base.network.AbstractBufferedReadCommunication;
+import de.rvwbk.group03.cardsagainsthumanity.network.FailedCreateGameReason;
 import de.rvwbk.group03.cardsagainsthumanity.network.FailedJoinGameReason;
+import de.rvwbk.group03.cardsagainsthumanity.network.FailedLeaveGameReason;
 import de.rvwbk.group03.cardsagainsthumanity.network.FailedLoginReason;
+import de.rvwbk.group03.cardsagainsthumanity.network.FailedGameMoveReason;
 import de.rvwbk.group03.cardsagainsthumanity.network.InvalidMessageReason;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.Command;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.CommandHelper;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.ClientCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.CreateGameCommand;
+import de.rvwbk.group03.cardsagainsthumanity.network.command.client.GameMoveCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.GetGameListCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.JoinGameCommand;
+import de.rvwbk.group03.cardsagainsthumanity.network.command.client.LeaveGameCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.LoggedInClientCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.LoginCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.StartGameCommand;
+import de.rvwbk.group03.cardsagainsthumanity.network.command.client.UpdateGameConfigurationCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.server.ConfirmLoginCommand;
+import de.rvwbk.group03.cardsagainsthumanity.network.command.server.FailedCreateGameCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.server.FailedJoinGameCommand;
+import de.rvwbk.group03.cardsagainsthumanity.network.command.server.FailedLeaveGameCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.server.FailedLoginCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.server.GameListCommand;
+import de.rvwbk.group03.cardsagainsthumanity.network.command.server.FailedGameMoveCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.server.InvalidMessageCommand;
 import de.rvwbk.group03.cardsagainsthumanity.server.ServerManager;
 import de.rvwbk.group03.cardsagainsthumanity.server.game.Competition;
@@ -89,10 +98,16 @@ public class ClientToServerCommunication extends AbstractBufferedReadCommunicati
 						handleGetGameListCommand((GetGameListCommand) command);
 					} else if (command instanceof JoinGameCommand) {
 						handleJoinGameCommand((JoinGameCommand) command);
+					} else if (command instanceof LeaveGameCommand) {
+						handleLeaveGameCommand((LeaveGameCommand) command);
 					} else if (command instanceof StartGameCommand) {
 						handleStartGameCommand((StartGameCommand) command);
 					} else if (command instanceof CreateGameCommand) {
 						handleCreateGameCommand((CreateGameCommand) command);
+					} else if (command instanceof UpdateGameConfigurationCommand) {
+						
+					} else if (command instanceof GameMoveCommand) {
+						
 					}
 				}
 			} else if (command instanceof LoginCommand) {
@@ -140,27 +155,66 @@ public class ClientToServerCommunication extends AbstractBufferedReadCommunicati
 	private void handleJoinGameCommand(final JoinGameCommand joinGameCommand) throws NullPointerException {
 		Objects.requireNonNull(joinGameCommand, "joinGameCommand must not be null");
 		
+		if (this.clientCommunication.getClient().hasGame()) {
+			FailedJoinGameCommand command = new FailedJoinGameCommand();
+			command.setFailedJoinGameReason(FailedJoinGameReason.ALREADY_IN_GAME);
+			this.clientCommunication.getWriteCommunication().writeMessage(CommandHelper.commandToJson(command));
+			return;
+		}
+		
 		try {
 			ServerManager.getManager().getGameManager().joinGame(joinGameCommand.getId(), joinGameCommand.getJoinPassword(), this.clientCommunication.getClient());
 		} catch (IllegalArgumentException e) {
-			// TODO: (AW 18.11.2016) Create new exception and get the failedJoinGame
 			FailedJoinGameCommand failedJoinGameCommand = new FailedJoinGameCommand();
 			failedJoinGameCommand.setFailedJoinGameReason(FailedJoinGameReason.GAME_NOT_FOUND);
 			this.clientCommunication.getWriteCommunication().writeMessage(CommandHelper.commandToJson(failedJoinGameCommand));
 		}
 	}
 	
+	private void handleLeaveGameCommand(final LeaveGameCommand leaveGameCommand) throws NullPointerException {
+		Objects.requireNonNull(leaveGameCommand, "leaveGameCommand must not be null");
+		
+		if (!this.clientCommunication.getClient().hasGame()) {
+			FailedLeaveGameCommand command = new FailedLeaveGameCommand();
+			command.setReason(FailedLeaveGameReason.NOT_IN_GAME);
+			this.clientCommunication.getWriteCommunication().writeMessage(CommandHelper.commandToJson(command));
+			return;
+		}
+		
+		try {
+			ServerManager.getManager().getGameManager().leaveGame(leaveGameCommand.getId(), this.clientCommunication.getClient());
+		} catch (IllegalArgumentException e) {
+			FailedLeaveGameCommand command = new FailedLeaveGameCommand();
+			command.setReason(FailedLeaveGameReason.GAME_NOT_FOUND);
+			this.clientCommunication.getWriteCommunication().writeMessage(CommandHelper.commandToJson(command));
+		}
+	}
+	
 	private void handleCreateGameCommand(final CreateGameCommand createGameCommand) throws NullPointerException {
 		Objects.requireNonNull(createGameCommand, "createGameCommand must not be null");
 		
-		// TODO: (AW 02.12.2016) Check is not in game!
+		if (this.clientCommunication.getClient().hasGame()) {
+			FailedCreateGameCommand command = new FailedCreateGameCommand();
+			command.setReason(FailedCreateGameReason.ALREADY_IN_GAME);
+			this.clientCommunication.getWriteCommunication().writeMessage(CommandHelper.commandToJson(command));
+			return;
+		}
 		
 		try {
-			ServerManager.getManager().getGameManager().addGame(new Competition(ClientCommandHelper.toGameConfiguration(createGameCommand.getConfiguration())));
+			Competition game = new Competition(ClientCommandHelper.toGameConfiguration(createGameCommand.getConfiguration()));
+			ServerManager.getManager().getGameManager().addGame(game);
+			ServerManager.getManager().getGameManager().joinGame(game.getId(), this.clientCommunication.getClient());
 		} catch (IllegalArgumentException e) {
-			// TODO: (AW 02.12.2016) Create and throw a FailedCreateGameCommand
-			LOGGER.info("Got create Game Command");
+			FailedCreateGameCommand command = new FailedCreateGameCommand();
+			command.setReason(FailedCreateGameReason.WRONG_CONFIGUARTION);
+			this.clientCommunication.getWriteCommunication().writeMessage(CommandHelper.commandToJson(command));
 		}
+	}
+	
+	private void handleUpdateGameConfigurationCommand(final UpdateGameConfigurationCommand updateGameConfigurationCommand) throws NullPointerException {
+		Objects.requireNonNull(updateGameConfigurationCommand, "updateGameConfigurationCommand must not be null");
+		
+		LOGGER.info("Unhandled update game configuration command.");
 	}
 	
 	private void handleStartGameCommand(final StartGameCommand startGameCommand) throws NullPointerException {
@@ -171,6 +225,17 @@ public class ClientToServerCommunication extends AbstractBufferedReadCommunicati
 		} catch (IllegalArgumentException e) {
 			LOGGER.info("Could not start the game.", e);
 		}
+	}
+	
+	private void handleGameMoveCommand(final GameMoveCommand gameMoveCommand) {
+		Objects.requireNonNull(gameMoveCommand, "gameMoveCommand must not be null");
+		
+		if (!this.clientCommunication.getClient().hasGame()) {
+			FailedGameMoveCommand command = new FailedGameMoveCommand();
+			command.setInvalidGameMoveReason(FailedGameMoveReason.NOT_IN_GAME);
+			return;
+		}
+		LOGGER.info("Unhandled game move command.");
 	}
 	
 	private boolean isClientLoggedInForCommand() {

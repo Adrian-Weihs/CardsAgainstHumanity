@@ -61,12 +61,44 @@ public class GameManager implements GameActionEventListener, GameActionEventHand
 		}
 		
 		if (!GameState.LOBBY.equals(game.getGameState())) {
-			throw new IllegalArgumentException("Game with the ginven id already started or finished.");
+			throw new IllegalArgumentException("Game with the given id already started or finished.");
 		}
 		
 		// TODO: (AW 18.11.2016) game anzahl prüfen
 		
 		game.join(client, joinPassword);
+	}
+	
+	public void joinGame(final int id, final Client client) {
+		Objects.requireNonNull(client, "client must not be null");
+		
+		Competition game = getGame(id);
+		
+		if (game == null) {
+			throw new IllegalArgumentException("Game with the given id not found.");
+		}
+		
+		if (!GameState.LOBBY.equals(game.getGameState())) {
+			throw new IllegalArgumentException("Game with the given id already started or finished.");
+		}
+		
+		game.join(client);
+	}
+	
+	public void leaveGame(final int id, final Client client) throws IllegalArgumentException {
+		Objects.requireNonNull(client, "client must not be null");
+		
+		Competition game = getGame(id);
+		
+		if (game == null) {
+			throw new IllegalArgumentException("Game with the given id not found.");
+		}
+		
+		if (!GameState.LOBBY.equals(game.getGameState())) {
+			throw new IllegalArgumentException("Game with the given id already started or finished.");
+		}
+		
+		game.leave(client);
 	}
 	
 	public void startGame(final int id, final Client client) throws NullPointerException {
@@ -79,16 +111,16 @@ public class GameManager implements GameActionEventListener, GameActionEventHand
 		}
 		
 		if (!GameState.LOBBY.equals(game.getGameState())) {
-			throw new IllegalArgumentException("Game with the ginven id already started or finished.");
+			throw new IllegalArgumentException("Game with the given id already started or finished.");
 		}
 		
 		GamePlayer player = game.getPlayerManager().getPlayer(client);
 		
-		if(player == null) {
+		if (player == null) {
 			throw new IllegalArgumentException("You are not a Player of this game.");
 		}
 		
-		if(!player.equals(game.getCreator())) {
+		if (!player.equals(game.getCreator())) {
 			throw new IllegalArgumentException("You are not the creator of this game.");
 		}
 		

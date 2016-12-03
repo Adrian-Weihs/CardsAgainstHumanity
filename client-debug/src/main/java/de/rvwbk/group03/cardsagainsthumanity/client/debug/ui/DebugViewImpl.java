@@ -32,6 +32,7 @@ import de.rvwbk.group03.cardsagainsthumanity.network.command.CommandHelper;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.CreateGameCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.GetGameListCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.JoinGameCommand;
+import de.rvwbk.group03.cardsagainsthumanity.network.command.client.LeaveGameCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.LoginCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.StartGameCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.UpdateGameConfigurationCommand;
@@ -54,6 +55,7 @@ public class DebugViewImpl extends JFrame implements DebugView {
 	private JMenuItem menuItemLogincommand = new JMenuItem("LoginCommand");
 	private JMenuItem menuItemGetGameListCommand = new JMenuItem("GetGameListCommand");
 	private JMenuItem menuItemJoinGameCommand = new JMenuItem("JoinGameCommand");
+	private JMenuItem menuItemLeaveGameCommand = new JMenuItem("LeaveGameCommand");
 	private JMenuItem menuItemStartGameCommand = new JMenuItem("StartGameCommand");
 	private JMenuItem menuItemCreateGameCommand = new JMenuItem("CreateGameCommand");
 	private JMenuItem menuItemUpdateGameConfigurationCommand = new JMenuItem("UpdateGameConfigurationCommand");
@@ -153,6 +155,8 @@ public class DebugViewImpl extends JFrame implements DebugView {
 		.addActionListener(event -> this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(new GetGameListCommand(), Command.class)));
 		this.menuItemJoinGameCommand.addActionListener(event -> this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(new JoinGameCommand(), Command.class)));
 		this.menuTemplate.add(this.menuItemJoinGameCommand);
+		this.menuItemLeaveGameCommand.addActionListener(event -> this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(new LeaveGameCommand(), Command.class)));
+		this.menuTemplate.add(this.menuItemLeaveGameCommand);
 		this.menuItemStartGameCommand.addActionListener(event -> this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(new StartGameCommand(), Command.class)));
 		this.menuTemplate.add(this.menuItemStartGameCommand);
 		this.menuItemCreateGameCommand.addActionListener(event -> {

@@ -29,7 +29,6 @@ public class ServerCommandHelper {
 		
 		result.setGameState(game.getGameState());
 		result.setId(game.getId());
-		result.setName(game.getConfiguration().getName());
 		result.setNumberOfPlayers(game.getPlayerManager().getPlayers().size());
 		if (sendPlayers) {
 			result.setPlayers(toPlayers(game.getPlayerManager().getPlayers()));

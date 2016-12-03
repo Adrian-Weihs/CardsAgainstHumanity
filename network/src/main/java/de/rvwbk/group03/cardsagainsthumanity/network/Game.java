@@ -6,7 +6,6 @@ import java.util.List;
 public class Game {
 	
 	private int id;
-	private String name;
 	private GameState gameState;
 	private Player creator;
 	private Configuration configuration = new Configuration();
@@ -19,14 +18,6 @@ public class Game {
 	
 	public void setId(final int id) throws NullPointerException {
 		this.id = id;
-	}
-	
-	public String getName() {
-		return this.name;
-	}
-	
-	public void setName(final String name) {
-		this.name = name;
 	}
 	
 	public GameState getGameState() {
