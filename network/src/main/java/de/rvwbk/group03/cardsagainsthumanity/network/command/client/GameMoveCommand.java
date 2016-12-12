@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.rvwbk.group03.cardsagainsthumanity.network.GameMoveAction;
-import de.rvwbk.group03.cardsagainsthumanity.network.WhiteCard;
+import de.rvwbk.group03.cardsagainsthumanity.network.DefaultWhiteCard;
 
 public class GameMoveCommand implements LoggedInClientCommand {
 	private GameMoveAction gameMoveAction;
-	private List<WhiteCard> whiteCards = new ArrayList<>();
+	private List<DefaultWhiteCard> whiteCards = new ArrayList<>();
 	
 	
 	public GameMoveAction getGameMoveAction() {
@@ -19,11 +19,11 @@ public class GameMoveCommand implements LoggedInClientCommand {
 		this.gameMoveAction = gameMoveAction;
 	}
 	
-	public List<WhiteCard> getWhiteCards() {
+	public List<DefaultWhiteCard> getWhiteCards() {
 		return this.whiteCards;
 	}
 	
-	public void setWhiteCards(final List<WhiteCard> whiteCards) {
+	public void setWhiteCards(final List<DefaultWhiteCard> whiteCards) {
 		this.whiteCards = whiteCards;
 	}
 }

@@ -5,16 +5,21 @@ import java.util.List;
 import java.util.Objects;
 
 import de.rvwbk.group03.cardsagainsthumanity.base.util.Strings;
+import de.rvwbk.group03.cardsagainsthumanity.data.Deck;
+import de.rvwbk.group03.cardsagainsthumanity.data.util.DataHelper;
 import de.rvwbk.group03.cardsagainsthumanity.network.Configuration;
 
 public class GameConfiguration {
 	
 	private String name = Strings.EMPTY;
 	private String joinPassword = Strings.EMPTY;
-	private String cardDeckName = "default";
+	private Deck cardDeck = DataHelper.getDeck(0);
 	private int maxNumberOfPlayer = 6;
 	private List<WinningCondition> winningConditions = new ArrayList<>();
 	
+	public GameConfiguration() {
+		// TODO Auto-generated constructor stub
+	}
 	
 	public int getMaxNumberOfPlayers() {
 		return this.maxNumberOfPlayer;
@@ -33,13 +38,7 @@ public class GameConfiguration {
 	}
 	
 	public String getCardDeckName() {
-		return this.cardDeckName;
-	}
-	
-	public void setCardDeckName(final String cardDeckName) throws IllegalArgumentException, NullPointerException {
-		this.cardDeckName = Strings.requireNonNullAndNonEmpty(cardDeckName, "cardDeckName");
-		// TODO: (AW 02.12.2016) check if the card deck name exist
-		
+		return this.cardDeck.getName();
 	}
 	
 	public String getJoinPassword() {
@@ -72,5 +71,13 @@ public class GameConfiguration {
 		Objects.requireNonNull(winningCondition, "winningCondition must not be null");
 		
 		return this.winningConditions.remove(winningCondition);
+	}
+	
+	public Deck getCardDeck() {
+		return this.cardDeck;
+	}
+	
+	public void setCardDeck(final Deck deck) {
+		this.cardDeck = Objects.requireNonNull(deck, "deck must not be null");
 	}
 }

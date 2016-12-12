@@ -16,7 +16,7 @@ public class OutOfCardsWinningConndition implements WinningCondition {
 	public boolean isConditionReached(final Competition game) throws NullPointerException {
 		Objects.requireNonNull(game, "game must not be null");
 		
-		return game.getCardManager().getDeck().getNumberOfCard() == 0;
+		return game.getStackManager().getWhiteCardStack().getNumberOfCards() == 0 || game.getStackManager().getBlackCardStack().getNumberOfCards() == 0;
 	}
 	
 }

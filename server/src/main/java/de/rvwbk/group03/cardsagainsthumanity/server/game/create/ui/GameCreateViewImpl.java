@@ -20,6 +20,8 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 
+import de.rvwbk.group03.cardsagainsthumanity.data.Deck;
+import de.rvwbk.group03.cardsagainsthumanity.data.util.DataHelper;
 import de.rvwbk.group03.cardsagainsthumanity.network.Configuration;
 import de.rvwbk.group03.cardsagainsthumanity.server.game.configuration.GameConfiguration;
 import de.rvwbk.group03.cardsagainsthumanity.server.game.configuration.OutOfCardsWinningConndition;
@@ -39,7 +41,7 @@ public class GameCreateViewImpl extends JFrame implements GameCreateView {
 	private JTextField joinPasswordTextField;
 	private JTextField textField_2;
 	private JTextField textField_3;
-	private JComboBox<String> cardDeckNamecomboBox = new JComboBox<>();
+	private JComboBox<Deck> cardDeckComboBox = new JComboBox<>();
 	
 	private JSlider maxPlayersSlider = new JSlider();
 	
@@ -123,8 +125,8 @@ public class GameCreateViewImpl extends JFrame implements GameCreateView {
 		JLabel lblCardDeck = new JLabel("Card Deck:");
 		panel.add(lblCardDeck, "2, 12");
 		
-		this.cardDeckNamecomboBox.addItem("default");
-		panel.add(this.cardDeckNamecomboBox, "6, 12, fill, default");
+		DataHelper.getDecks().forEach(deck -> this.cardDeckComboBox.addItem(deck));
+		panel.add(this.cardDeckComboBox, "6, 12, fill, default");
 		
 		JLabel lblMaxPlayers = new JLabel("Max Players:");
 		panel.add(lblMaxPlayers, "2, 14");
@@ -168,7 +170,7 @@ public class GameCreateViewImpl extends JFrame implements GameCreateView {
 			config.setName(this.nameTextField.getText());
 			config.setJoinPassword(this.joinPasswordTextField.getText());
 			config.setMaxNumberOfPlayer(this.maxPlayersSlider.getValue());
-			config.setCardDeckName(this.cardDeckNamecomboBox.getSelectedItem().toString());
+			config.setCardDeck(this.cardDeckComboBox.getItemAt(this.cardDeckComboBox.getSelectedIndex()));
 			config.addWinningCondition(new OutOfCardsWinningConndition());
 			this.presenter.handleCreateButtonClicked(config);
 			COUNT.incrementAndGet();

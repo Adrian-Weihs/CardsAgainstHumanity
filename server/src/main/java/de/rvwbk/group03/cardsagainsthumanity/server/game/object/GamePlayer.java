@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import de.rvwbk.group03.cardsagainsthumanity.data.WhiteCard;
 import de.rvwbk.group03.cardsagainsthumanity.network.PlayerState;
 import de.rvwbk.group03.cardsagainsthumanity.server.client.Client;
 import de.rvwbk.group03.cardsagainsthumanity.server.game.Competition;
+import de.rvwbk.group03.cardsagainsthumanity.server.game.Hand;
 
 /**
  * The player class to play a game.
@@ -15,8 +17,10 @@ import de.rvwbk.group03.cardsagainsthumanity.server.game.Competition;
  */
 public class GamePlayer {
 	
-	private Client client;
-	private Competition game;
+	
+	private final Client client;
+	private final Competition game;
+	private final Hand hand = new Hand();
 	
 	private PlayerState playerState = PlayerState.WAITING;
 	
@@ -80,13 +84,8 @@ public class GamePlayer {
 		return this.client.getUser().getName();
 	}
 	
-	/**
-	 * Returns the white cards of this player.
-	 * 
-	 * @return The white cards of this player.
-	 */
-	public List<WhiteCard> getWhiteCards() {
-		return this.whiteCards;
+	public Hand getHand() {
+		return this.hand;
 	}
 	
 	/**
@@ -100,6 +99,11 @@ public class GamePlayer {
 	
 	public PlayerState getPlayerState() {
 		return this.playerState;
+	}
+	
+	public void setZar(final boolean zar) {
+		this.zar = zar;
+		
 	}
 	
 	public boolean isZar() {

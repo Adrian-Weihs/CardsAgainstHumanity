@@ -14,7 +14,7 @@ import de.rvwbk.group03.cardsagainsthumanity.server.game.object.GamePlayer;
 
 public class ServerCommandHelper {
 	
-	public static Game toGame(final Competition game, final boolean sendPlayers, final boolean sendPassword) throws NullPointerException {
+	public static Game toGame(final Competition game, final boolean sendPlayers, final boolean sendPlayersCard, final boolean sendPassword) throws NullPointerException {
 		Objects.requireNonNull(game, "game must not be null");
 		
 		Game result = new Game();
@@ -24,29 +24,29 @@ public class ServerCommandHelper {
 		if (game.getCreator() == null) {
 			result.setCreator(Player.SERVER);
 		} else {
-			result.setCreator(toPlayer(game.getCreator()));
+			result.setCreator(toPlayer(game.getCreator(), sendPlayersCard));
 		}
 		
 		result.setGameState(game.getGameState());
 		result.setId(game.getId());
 		result.setNumberOfPlayers(game.getPlayerManager().getPlayers().size());
 		if (sendPlayers) {
-			result.setPlayers(toPlayers(game.getPlayerManager().getPlayers()));
+			result.setPlayers(toPlayers(game.getPlayerManager().getPlayers(), sendPlayersCard));
 		}
 		
 		return result;
 	}
 	
-	public static List<Game> toGames(final Collection<Competition> games, final boolean sendPlayers, final boolean sendPassword) throws NullPointerException {
+	public static List<Game> toGames(final Collection<Competition> games, final boolean sendPlayers, final boolean sendPlayersCard, final boolean sendPassword) throws NullPointerException {
 		Objects.requireNonNull(games, "games must not be null");
 		
 		List<Game> result = new ArrayList<>();
-		games.forEach(game -> result.add(toGame(game, sendPlayers, sendPassword)));
+		games.forEach(game -> result.add(toGame(game, sendPlayers, sendPlayersCard, sendPassword)));
 		
 		return result;
 	}
 	
-	public static Player toPlayer(final GamePlayer player) throws NullPointerException {
+	public static Player toPlayer(final GamePlayer player, final boolean sendCards) throws NullPointerException {
 		Objects.requireNonNull(player, "player must not be null");
 		
 		Player result = new Player();
@@ -54,17 +54,20 @@ public class ServerCommandHelper {
 		result.setId(player.getUserId());
 		result.setName(player.getName());
 		result.setPlayerState(player.getPlayerState());
+		if(sendCards) {
+			result.setWhiteCards(player.getHand().getWhiteCards());
+		}
 		result.setScore(player.getScore());
 		result.setZar(player.isZar());
 		
 		return result;
 	}
 	
-	public static List<Player> toPlayers(final Collection<GamePlayer> players) throws NullPointerException {
+	public static List<Player> toPlayers(final Collection<GamePlayer> players, final boolean sendCards) throws NullPointerException {
 		Objects.requireNonNull(players, "players must not be null");
 		
 		List<Player> result = new ArrayList<>();
-		players.forEach(player -> result.add(toPlayer(player)));
+		players.forEach(player -> result.add(toPlayer(player, sendCards)));
 		
 		return result;
 	}

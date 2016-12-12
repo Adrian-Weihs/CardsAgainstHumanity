@@ -47,8 +47,17 @@ public class GameManager implements GameActionEventListener, GameActionEventHand
 		Objects.requireNonNull(game, "game must not be null");
 		
 		this.games.put(game.getId(), game);
+		game.addGameActionEventListener(this);
 		
 		fireGameActionEvent(new GameActionEvent(this, game, GameAction.GAME_CREATED));
+	}
+	
+	public void removeGame(final Competition game) throws NullPointerException {
+		Objects.requireNonNull(game, "game must not be null");
+		this.games.remove(game.getId());
+		game.removeGameActionEventListener(this);
+		
+		fireGameActionEvent(new GameActionEvent(this, game, GameAction.GAME_REMOVED));
 	}
 	
 	public void joinGame(final int id, final String joinPassword, final Client client) throws IllegalArgumentException, NullPointerException {

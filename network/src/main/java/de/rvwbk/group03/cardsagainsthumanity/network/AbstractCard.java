@@ -1,10 +1,11 @@
 package de.rvwbk.group03.cardsagainsthumanity.network;
 
-public abstract class Card {
+public abstract class AbstractCard implements de.rvwbk.group03.cardsagainsthumanity.data.Card {
 	private int id;
 	private String text;
 	
 	
+	@Override
 	public int getId() {
 		return this.id;
 	}
@@ -13,6 +14,7 @@ public abstract class Card {
 		this.id = id;
 	}
 	
+	@Override
 	public String getText() {
 		return this.text;
 	}

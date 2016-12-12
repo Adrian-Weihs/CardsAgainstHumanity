@@ -1,6 +1,10 @@
 package de.rvwbk.group03.cardsagainsthumanity.network;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
+import de.rvwbk.group03.cardsagainsthumanity.data.WhiteCard;
 
 public class Player {
 	public final static Player SERVER = new Player(-1, "<Server>");
@@ -10,6 +14,7 @@ public class Player {
 	private int score;
 	private boolean zar;
 	private PlayerState playerState = PlayerState.WAITING;
+	private List<WhiteCard> whiteCards = new ArrayList<>();
 	
 	public Player() {
 		
@@ -42,6 +47,14 @@ public class Player {
 	
 	public int getScore() {
 		return this.score;
+	}
+	
+	public List<WhiteCard> getWhiteCards() {
+		return this.whiteCards;
+	}
+	
+	public void setWhiteCards(final List<WhiteCard> cards) throws NullPointerException {
+		this.whiteCards = new ArrayList<>(Objects.requireNonNull(cards, "cards must not be null"));
 	}
 	
 	public void setScore(final int score) {

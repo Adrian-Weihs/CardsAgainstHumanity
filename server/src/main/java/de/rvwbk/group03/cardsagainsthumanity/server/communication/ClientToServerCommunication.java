@@ -12,10 +12,10 @@ import com.google.gson.JsonSyntaxException;
 import de.rvwbk.group03.cardsagainsthumanity.base.exception.WrongUserNameOrPasswordException;
 import de.rvwbk.group03.cardsagainsthumanity.base.network.AbstractBufferedReadCommunication;
 import de.rvwbk.group03.cardsagainsthumanity.network.FailedCreateGameReason;
+import de.rvwbk.group03.cardsagainsthumanity.network.FailedGameMoveReason;
 import de.rvwbk.group03.cardsagainsthumanity.network.FailedJoinGameReason;
 import de.rvwbk.group03.cardsagainsthumanity.network.FailedLeaveGameReason;
 import de.rvwbk.group03.cardsagainsthumanity.network.FailedLoginReason;
-import de.rvwbk.group03.cardsagainsthumanity.network.FailedGameMoveReason;
 import de.rvwbk.group03.cardsagainsthumanity.network.InvalidMessageReason;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.Command;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.CommandHelper;
@@ -31,11 +31,11 @@ import de.rvwbk.group03.cardsagainsthumanity.network.command.client.StartGameCom
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.UpdateGameConfigurationCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.server.ConfirmLoginCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.server.FailedCreateGameCommand;
+import de.rvwbk.group03.cardsagainsthumanity.network.command.server.FailedGameMoveCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.server.FailedJoinGameCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.server.FailedLeaveGameCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.server.FailedLoginCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.server.GameListCommand;
-import de.rvwbk.group03.cardsagainsthumanity.network.command.server.FailedGameMoveCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.server.InvalidMessageCommand;
 import de.rvwbk.group03.cardsagainsthumanity.server.ServerManager;
 import de.rvwbk.group03.cardsagainsthumanity.server.game.Competition;
@@ -147,7 +147,7 @@ public class ClientToServerCommunication extends AbstractBufferedReadCommunicati
 		Objects.requireNonNull(getGameListCommand, "getGameListCommand must not be null");
 		
 		GameListCommand gameListCommand = new GameListCommand();
-		gameListCommand.setGames(ServerCommandHelper.toGames(ServerManager.getManager().getGameManager().getGames(), false, false));
+		gameListCommand.setGames(ServerCommandHelper.toGames(ServerManager.getManager().getGameManager().getGames(), false, false, false));
 		
 		this.clientCommunication.getWriteCommunication().writeMessage(CommandHelper.commandToJson(gameListCommand));
 	}
