@@ -80,5 +80,6 @@
         <module>data-util</module>
         <module>client-debug</module>
     <module>client-javafx</module>
+    <module>client-swing</module>
   </modules>
 </project>
