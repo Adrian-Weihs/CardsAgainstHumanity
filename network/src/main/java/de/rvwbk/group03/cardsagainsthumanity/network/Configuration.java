@@ -6,12 +6,16 @@ public class Configuration {
 	public static final int MIN_PLAYERS = 3;
 	public static final int MAX_PLAYERS = 8;
 	
-	private String name = Strings.EMPTY;
+	private String name;
 	private String joinPassword = Strings.EMPTY;
 	private boolean passwordProtected;
 	private String cardDeckName = "default";
 	private int maxNumberOfPlayer = 6;
 	
+	
+	public Configuration(final String name) {
+		this.name = Strings.requireNonNullAndNonEmpty(name, "name");
+	}
 	
 	public int getMaxNumberOfPlayers() {
 		return this.maxNumberOfPlayer;
@@ -49,7 +53,7 @@ public class Configuration {
 		return this.name;
 	}
 	
-	public void setName(final String name) {
-		this.name = name;
+	public void setName(final String name) throws IllegalArgumentException, NullPointerException {
+		this.name = Strings.requireNonNullAndNonEmpty(name, "name");
 	}
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import de.rvwbk.group03.cardsagainsthumanity.network.PlayerState;
 import de.rvwbk.group03.cardsagainsthumanity.server.client.Client;
 import de.rvwbk.group03.cardsagainsthumanity.server.game.object.GamePlayer;
 
@@ -49,6 +50,16 @@ public class PlayerManager {
 		this.playerOrder.addAll(getPlayers());
 		Collections.shuffle(this.playerOrder);
 		this.playerOrder.get(this.currentZar).setZar(true);
+		
+		setupPlayerState();
+	}
+	
+	private void setupPlayerState() {
+		for(GamePlayer player : this.playerOrder) {
+			if(PlayerState.WAITING.equals(player.getPlayerState()) && !player.isZar()) {
+				player.setPlayerState(PlayerState.PLAYING);
+			}
+		}
 	}
 	
 	protected void nextRound() throws IllegalStateException {
@@ -65,6 +76,8 @@ public class PlayerManager {
 		}
 		
 		this.playerOrder.get(this.currentZar).setZar(true);
+		
+		setupPlayerState();
 	}
 	
 	public GamePlayer getZar() throws IllegalStateException {

@@ -3,12 +3,12 @@ package de.rvwbk.group03.cardsagainsthumanity.network.command.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.rvwbk.group03.cardsagainsthumanity.data.WhiteCard;
 import de.rvwbk.group03.cardsagainsthumanity.network.GameMoveAction;
-import de.rvwbk.group03.cardsagainsthumanity.network.DefaultWhiteCard;
 
 public class GameMoveCommand implements LoggedInClientCommand {
 	private GameMoveAction gameMoveAction;
-	private List<DefaultWhiteCard> whiteCards = new ArrayList<>();
+	private List<WhiteCard> whiteCards = new ArrayList<>();
 	
 	
 	public GameMoveAction getGameMoveAction() {
@@ -19,11 +19,11 @@ public class GameMoveCommand implements LoggedInClientCommand {
 		this.gameMoveAction = gameMoveAction;
 	}
 	
-	public List<DefaultWhiteCard> getWhiteCards() {
+	public List<WhiteCard> getWhiteCards() {
 		return this.whiteCards;
 	}
 	
-	public void setWhiteCards(final List<DefaultWhiteCard> whiteCards) {
+	public void setWhiteCards(final List<WhiteCard> whiteCards) {
 		this.whiteCards = whiteCards;
 	}
 }

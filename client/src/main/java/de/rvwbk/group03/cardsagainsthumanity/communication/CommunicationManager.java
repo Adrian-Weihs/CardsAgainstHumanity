@@ -96,9 +96,7 @@ public class CommunicationManager {
 	 * @throws NullPointerException if {@code name} or {@code password} is {@code null}.
 	 */
 	public static void login (final String name, final String password) throws NullPointerException {
-		LoginCommand loginCommand = new LoginCommand();
-		loginCommand.setName(name);
-		loginCommand.setPassword(password);
+		LoginCommand loginCommand = new LoginCommand(Objects.requireNonNull(name, "name must not be null"), password);
 		
 		// TODO: throw PasswordWrongException, if Password is wrong as soon corresponding backend logic works
 		getWriteConnection().writeMessage(CommandHelper.commandToJson(loginCommand));
@@ -132,8 +130,7 @@ public class CommunicationManager {
 	 * @param id the id of the game that shall be joined.
 	 */
 	public static void joinGame(final int id) {
-		JoinGameCommand joinGameCommand = new JoinGameCommand();
-		joinGameCommand.setId(id);
+		JoinGameCommand joinGameCommand = new JoinGameCommand(Objects.requireNonNull(id, "id must not be null"));
 		getWriteConnection().writeMessage(CommandHelper.commandToJson(joinGameCommand));
 		
 		Command command = CommandHelper.jsonToCommand(getReadConnection().getLastMessage());
@@ -148,9 +145,7 @@ public class CommunicationManager {
 	 * @param password the password needed in order to join the game
 	 */
 	public static void joinGame(final int id, final String password) {
-		JoinGameCommand joinGameCommand = new JoinGameCommand();
-		joinGameCommand.setId(id);
-		joinGameCommand.setJoinPassword(password);
+		JoinGameCommand joinGameCommand = new JoinGameCommand(Objects.requireNonNull(id, "id must not be null"), password);
 		getWriteConnection().writeMessage(CommandHelper.commandToJson(joinGameCommand));
 	}
 	
@@ -192,8 +187,7 @@ public class CommunicationManager {
 	 * @throws NullPointerException if {@code name} is {@code null} or {@code joinPassword} is {@code null} and {@code passwordProtected}
 	 */
 	public static void createGame(final String name, final String cardDeckName, final int maxNumberOfPlayer, final boolean passwordProtected, final String joinPassword) throws NullPointerException {
-		Configuration configuration = new Configuration();
-		configuration.setName(Objects.requireNonNull(name, "name must not be null."));
+		Configuration configuration = new Configuration(Objects.requireNonNull(name, "name must not be null."));
 		configuration.setCardDeckName(cardDeckName);
 		configuration.setMaxNumberOfPlayer(maxNumberOfPlayer);
 		if (passwordProtected) {
@@ -210,9 +204,7 @@ public class CommunicationManager {
 	 * @throws NullPointerException if {@code id} is {@code null}.
 	 */
 	public static void updateGame(final int id, final Configuration configuration) throws NullPointerException {
-		UpdateGameConfigurationCommand updateGameCommand = new UpdateGameConfigurationCommand();
-		updateGameCommand.setConfiguration(configuration);
-		updateGameCommand.setId(Objects.requireNonNull(id, "id must not be null."));
+		UpdateGameConfigurationCommand updateGameCommand = new UpdateGameConfigurationCommand(Objects.requireNonNull(id, "id must not be null."), Objects.requireNonNull(configuration, "configuration must not be null"));
 		getWriteConnection().writeMessage(CommandHelper.commandToJson(updateGameCommand));
 	}
 	
@@ -228,8 +220,7 @@ public class CommunicationManager {
 	 * @throws NullPointerException if {@code id} or {@code name} is {@code null} or {@code joinPassword} is {@code null} and {@code passwordProtected}
 	 */
 	public static void updateGame(final int id, final String name, final String cardDeckName, final int maxNumberOfPlayer, final boolean passwordProtected, final String joinPassword) throws NullPointerException {
-		Configuration configuration = new Configuration();
-		configuration.setName(Objects.requireNonNull(name, "name must not be null."));
+		Configuration configuration = new Configuration(Objects.requireNonNull(name, "name must not be null."));
 		configuration.setCardDeckName(cardDeckName);
 		configuration.setMaxNumberOfPlayer(maxNumberOfPlayer);
 		if (passwordProtected) {
@@ -245,8 +236,7 @@ public class CommunicationManager {
 	 * @throws NullPointerException if {@code id} is {@code null}.
 	 */
 	public static void startGame(final int id) throws NullPointerException {
-		StartGameCommand startGameCommand = new StartGameCommand();
-		startGameCommand.setId(Objects.requireNonNull(id, "id must not be null."));
+		StartGameCommand startGameCommand = new StartGameCommand(Objects.requireNonNull(id, "id must not be null."));
 		getWriteConnection().writeMessage(CommandHelper.commandToJson(startGameCommand));
 	}
 	
@@ -257,8 +247,7 @@ public class CommunicationManager {
 	 * @throws NullPointerException if {@code id} is {@code null}.
 	 */
 	public static void leaveGame(final int id) throws NullPointerException {
-		LeaveGameCommand leaveGameCommand = new LeaveGameCommand();
-		leaveGameCommand.setId(Objects.requireNonNull(id, "id must not be null."));
+		LeaveGameCommand leaveGameCommand = new LeaveGameCommand(Objects.requireNonNull(id, "id must not be null."));
 		getWriteConnection().writeMessage(CommandHelper.commandToJson(leaveGameCommand));
 		
 		Command command = CommandHelper.jsonToCommand(getReadConnection().getLastMessage());

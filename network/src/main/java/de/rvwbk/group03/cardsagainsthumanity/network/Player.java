@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import de.rvwbk.group03.cardsagainsthumanity.base.util.Strings;
 import de.rvwbk.group03.cardsagainsthumanity.data.WhiteCard;
 
 public class Player {
@@ -16,13 +17,9 @@ public class Player {
 	private PlayerState playerState = PlayerState.WAITING;
 	private List<WhiteCard> whiteCards = new ArrayList<>();
 	
-	public Player() {
-		
-	}
-	
-	private Player(final int id, final String name) {
-		this.id = id;
-		this.name = name;
+	public Player(final int id, final String name) {
+		setId(id);
+		setName(name);
 	}
 	
 	public int getId() {
@@ -30,7 +27,7 @@ public class Player {
 	}
 	
 	public void setId(final int id) {
-		this.id = id;
+		this.id = Objects.requireNonNull(id, "id must not be null");
 	}
 	
 	public String getName() {
@@ -38,11 +35,7 @@ public class Player {
 	}
 	
 	public void setName(final String name) {
-		if (Objects.requireNonNull(name, "name must not be null").isEmpty()) {
-			throw new IllegalArgumentException("name must not be empty");
-		}
-		
-		this.name = name;
+		this.name = Strings.requireNonNullAndNonEmpty(name, "name");
 	}
 	
 	public int getScore() {
@@ -73,7 +66,7 @@ public class Player {
 		return this.playerState;
 	}
 	
-	public void setPlayerState(final PlayerState playerState) {
-		this.playerState = playerState;
+	public void setPlayerState(final PlayerState playerState) throws NullPointerException {
+		this.playerState = Objects.requireNonNull(playerState, "playerState must not be null");
 	}
 }

@@ -2,15 +2,20 @@ package de.rvwbk.group03.cardsagainsthumanity.network;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Game {
 	
 	private int id;
 	private GameState gameState;
 	private Player creator;
-	private Configuration configuration = new Configuration();
+	private Configuration configuration;
 	private int numberOfPlayers;
 	private List<Player> players = new ArrayList<>();
+	
+	public Game(final Configuration configuration) throws NullPointerException {
+		this.configuration = Objects.requireNonNull(configuration, "configuration must not be null");
+	}
 	
 	public int getId() {
 		return this.id;
@@ -40,8 +45,8 @@ public class Game {
 		return this.configuration;
 	}
 	
-	public void setConfiguration(final Configuration configuration) {
-		this.configuration = configuration;
+	public void setConfiguration(final Configuration configuration) throws NullPointerException {
+		this.configuration = Objects.requireNonNull(configuration, "configuration must not be null");
 	}
 	
 	public int getNumberOfPlayers() {

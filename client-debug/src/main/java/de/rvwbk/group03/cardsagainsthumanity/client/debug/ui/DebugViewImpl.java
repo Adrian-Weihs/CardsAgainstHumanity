@@ -149,24 +149,24 @@ public class DebugViewImpl extends JFrame implements DebugView {
 		this.menuBar.add(this.menuTemplate);
 		this.menuTemplate.add(this.menuItemLogincommand);
 		this.menuItemLogincommand
-		.addActionListener(event -> this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(new LoginCommand(), Command.class)));
+		.addActionListener(event -> this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(new LoginCommand("Player1"), Command.class)));
 		this.menuTemplate.add(this.menuItemGetGameListCommand);
 		this.menuItemGetGameListCommand
 		.addActionListener(event -> this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(new GetGameListCommand(), Command.class)));
-		this.menuItemJoinGameCommand.addActionListener(event -> this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(new JoinGameCommand(), Command.class)));
+		this.menuItemJoinGameCommand.addActionListener(event -> this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(new JoinGameCommand(1), Command.class)));
 		this.menuTemplate.add(this.menuItemJoinGameCommand);
-		this.menuItemLeaveGameCommand.addActionListener(event -> this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(new LeaveGameCommand(), Command.class)));
+		this.menuItemLeaveGameCommand.addActionListener(event -> this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(new LeaveGameCommand(1), Command.class)));
 		this.menuTemplate.add(this.menuItemLeaveGameCommand);
-		this.menuItemStartGameCommand.addActionListener(event -> this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(new StartGameCommand(), Command.class)));
+		this.menuItemStartGameCommand.addActionListener(event -> this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(new StartGameCommand(1), Command.class)));
 		this.menuTemplate.add(this.menuItemStartGameCommand);
 		this.menuItemCreateGameCommand.addActionListener(event -> {
 			CreateGameCommand command = new CreateGameCommand();
-			command.setConfiguration(new Configuration());
+			command.setConfiguration(new Configuration("Test"));
 			this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(command, Command.class));
 		});
 		this.menuTemplate.add(this.menuItemCreateGameCommand);
 		this.menuItemUpdateGameConfigurationCommand.addActionListener(
-				event -> this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(new UpdateGameConfigurationCommand(), Command.class)));
+				event -> this.jsonMessage.setText(CommandHelper.createGsonCommandBuilder().serializeNulls().create().toJson(new UpdateGameConfigurationCommand(1, new Configuration("Test")), Command.class)));
 		this.menuTemplate.add(this.menuItemUpdateGameConfigurationCommand);
 		
 	}

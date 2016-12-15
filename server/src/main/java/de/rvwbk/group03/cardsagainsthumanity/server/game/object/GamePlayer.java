@@ -101,6 +101,10 @@ public class GamePlayer {
 		return this.playerState;
 	}
 	
+	public void setPlayerState(final PlayerState playerState) throws NullPointerException {
+		this.playerState = Objects.requireNonNull(playerState, "playerState must not be null");
+	}
+	
 	public void setZar(final boolean zar) {
 		this.zar = zar;
 		

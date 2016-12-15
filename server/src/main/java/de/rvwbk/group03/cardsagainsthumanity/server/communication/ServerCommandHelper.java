@@ -17,9 +17,7 @@ public class ServerCommandHelper {
 	public static Game toGame(final Competition game, final boolean sendPlayers, final boolean sendPlayersCard, final boolean sendPassword) throws NullPointerException {
 		Objects.requireNonNull(game, "game must not be null");
 		
-		Game result = new Game();
-		
-		result.setConfiguration(toConfiguration(game.getConfiguration(), sendPassword));
+		Game result = new Game(toConfiguration(game.getConfiguration(), sendPassword));
 		
 		if (game.getCreator() == null) {
 			result.setCreator(Player.SERVER);
@@ -49,10 +47,8 @@ public class ServerCommandHelper {
 	public static Player toPlayer(final GamePlayer player, final boolean sendCards) throws NullPointerException {
 		Objects.requireNonNull(player, "player must not be null");
 		
-		Player result = new Player();
+		Player result = new Player(player.getUserId(), player.getName());
 		
-		result.setId(player.getUserId());
-		result.setName(player.getName());
 		result.setPlayerState(player.getPlayerState());
 		if(sendCards) {
 			result.setWhiteCards(player.getHand().getWhiteCards());
@@ -75,7 +71,7 @@ public class ServerCommandHelper {
 	public static Configuration toConfiguration(final GameConfiguration configuration, final boolean sendPassword) throws NullPointerException {
 		Objects.requireNonNull(configuration, "configuration must not be null");
 		
-		Configuration result = new Configuration();
+		Configuration result = new Configuration(configuration.getName());
 		
 		result.setCardDeckName(configuration.getCardDeckName());
 		if (sendPassword) {
@@ -83,7 +79,6 @@ public class ServerCommandHelper {
 		}
 		result.setPasswordProtected(!configuration.getJoinPassword().isEmpty());
 		result.setMaxNumberOfPlayer(configuration.getMaxNumberOfPlayers());
-		result.setName(configuration.getName());
 		
 		return result;
 	}
