@@ -24,9 +24,10 @@ public class ServerToClientCommunication extends AbstractBufferedReadCommunicati
 	
 	@Override
 	public void run() {
+		ClientManager clientManager = new ClientManager();
 		try {
 			String message;
-			ClientManager.connect();
+			clientManager.connect();
 			while (!isDisconnected() && (message = getReader().readLine()) != null) {
 				while (!checkBrackets(message)) {
 					LOGGER.info("Brackets worng: \"{}\"", message);
@@ -41,10 +42,9 @@ public class ServerToClientCommunication extends AbstractBufferedReadCommunicati
 			//Ok, server disconnected
 		}
 		try {
-			ClientManager.disconnect();
+			clientManager.disconnect();
 		} catch (IOException e) {
 			UiManager.closeAllViews();
-			// TODO: Error View
 		}
 	}
 	
