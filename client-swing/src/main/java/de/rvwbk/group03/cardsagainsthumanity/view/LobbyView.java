@@ -5,14 +5,13 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -41,9 +40,7 @@ public class LobbyView extends JFrame implements ClientView {
 	
 	private PrintStream console;
 	private final JPanel buttonPanel = new JPanel();
-	private final JPanel loginPanel = new JPanel();
 	private final JPanel lobbyPanel = new JPanel();
-	private final JPanel contentPanel = new JPanel();
 	
 	private JTable lobbyTable;
 	
@@ -63,13 +60,13 @@ public class LobbyView extends JFrame implements ClientView {
 		setTitle(VIEW_NAME);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(700, 500);
-		setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
+		//		setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
 		
 		this.buttonPanel.add(this.connectButton);
 		this.buttonPanel.add(this.refreshLobbyButton);
 		this.buttonPanel.add(this.joinGameButton);
 		
-		this.buttonPanel.setLayout(new BoxLayout(this.buttonPanel, BoxLayout.X_AXIS));
+		//		this.buttonPanel.setLayout(new BoxLayout(this.buttonPanel, BoxLayout.X_AXIS));
 		this.buttonPanel.setVisible(true);
 		
 		this.joinGameButton.setEnabled(getSelectedGame() != null);
@@ -87,17 +84,6 @@ public class LobbyView extends JFrame implements ClientView {
 		// Refresh Lobby view
 		this.refreshLobbyButton.doClick();
 		
-		this.lobbyTable = new JTable();
-		this.lobbyTable.setEnabled(true);
-		this.lobbyTable.getTableHeader().setReorderingAllowed(false);
-		this.lobbyTable.setRowSelectionAllowed(true);
-		this.lobbyTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		this.lobbyTable.getSelectionModel().addListSelectionListener(event -> gameSelectionChanged(event));
-		this.lobbyTable.setModel(new ClientLobbyModel(this.manager.getLobbyManager().getGames()));
-		
-		this.lobbyPanel.add(this.lobbyTable);
-		add(this.lobbyPanel, BorderLayout.CENTER);
-		
 		setVisible(true);
 	}
 	
@@ -106,8 +92,22 @@ public class LobbyView extends JFrame implements ClientView {
 		this.manager.getLobbyManager().joinGame(getSelectedGame().getId(), Strings.EMPTY);
 	}
 	
-	private void refreshLobbyViewButtonClicked(final ActionEvent event) {
+	private void refreshLobbyViewButtonClicked(final ActionEvent actionEvent) {
 		this.games = this.manager.getLobbyManager().getGames();
+		
+		this.lobbyPanel.removeAll();
+		
+		this.lobbyTable = new JTable();
+		this.lobbyTable.setEnabled(true);
+		this.lobbyTable.getTableHeader().setReorderingAllowed(false);
+		this.lobbyTable.setRowSelectionAllowed(true);
+		this.lobbyTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		this.lobbyTable.getSelectionModel().addListSelectionListener(event -> gameSelectionChanged(event));
+		this.lobbyTable.setModel(new ClientLobbyModel(this.games));
+		
+		this.lobbyPanel.add(new JScrollPane(this.lobbyTable));
+		add(this.lobbyPanel, BorderLayout.CENTER);
+		revalidate();
 	}
 	
 	private void connectButtonClicked(final ActionEvent event) {

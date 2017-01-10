@@ -62,6 +62,13 @@ public class LobbyManager implements LobbyManagerEventHandler {
 	@Override
 	public void addLobbyManagerActionEventListener(final ClientEventListener listener) throws NullPointerException {
 		this.lobbyListeners.add(Objects.requireNonNull(listener, "listener must not be null."));
+		
+		// Workaround preventing race condition
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// Won't happen
+		}
 	}
 	
 	@Override

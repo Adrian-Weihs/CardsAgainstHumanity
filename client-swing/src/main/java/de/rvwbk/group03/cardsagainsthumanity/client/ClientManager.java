@@ -93,6 +93,15 @@ public class ClientManager implements ClientManagerEventHandler {
 	}
 	
 	public void doLogin(final String user, final String password) throws WrongUserNameOrPasswordException {
+		
+		if (serverCommunication == null) {
+			try {
+				connect();
+			} catch (IOException e) {
+				return;
+			}
+		}
+		
 		LoginCommand command = new LoginCommand(user, password);
 		
 		serverCommunication.getWriteCommunication().writeMessage(CommandHelper.commandToJson(command));
