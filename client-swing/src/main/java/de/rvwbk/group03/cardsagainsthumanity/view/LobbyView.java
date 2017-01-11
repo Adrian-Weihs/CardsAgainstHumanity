@@ -3,13 +3,11 @@ package de.rvwbk.group03.cardsagainsthumanity.view;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -34,9 +32,9 @@ public class LobbyView extends JFrame implements ClientView {
 	private final ClientPresenter presenter;
 	private AbstractManager manager;
 	
-	private JButton connectButton = new JButton("Connect");
 	private JButton refreshLobbyButton = new JButton("Refresh Lobby");
 	private JButton joinGameButton = new JButton("Join game");
+	private JButton createGameButton = new JButton("Create Game");
 	
 	private PrintStream console;
 	private final JPanel buttonPanel = new JPanel();
@@ -62,26 +60,22 @@ public class LobbyView extends JFrame implements ClientView {
 		setSize(700, 500);
 		//		setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
 		
-		this.buttonPanel.add(this.connectButton);
-		this.buttonPanel.add(this.refreshLobbyButton);
+		this.buttonPanel.add(this.createGameButton);
 		this.buttonPanel.add(this.joinGameButton);
+		this.buttonPanel.add(this.refreshLobbyButton);
 		
 		//		this.buttonPanel.setLayout(new BoxLayout(this.buttonPanel, BoxLayout.X_AXIS));
 		this.buttonPanel.setVisible(true);
 		
 		this.joinGameButton.setEnabled(getSelectedGame() != null);
 		
-		this.connectButton.addActionListener(event -> connectButtonClicked(event));
 		this.refreshLobbyButton.addActionListener(event -> refreshLobbyViewButtonClicked(event));
 		this.joinGameButton.addActionListener(event -> joinGameButtonClicked(event));
+		this.createGameButton.addActionListener(event -> createGameButtonClicked(event));
 		
 		add(this.buttonPanel, BorderLayout.SOUTH);
 		
-		
-		
-		this.connectButton.setVisible(false);
-		
-		// Refresh Lobby view
+		// Refresh Lobby view on startup
 		this.refreshLobbyButton.doClick();
 		
 		setVisible(true);
@@ -90,6 +84,12 @@ public class LobbyView extends JFrame implements ClientView {
 	private void joinGameButtonClicked(final ActionEvent event) {
 		// TODO: Passwort umsetzen
 		this.manager.getLobbyManager().joinGame(getSelectedGame().getId(), Strings.EMPTY);
+		// TODO: GameView anzeigen
+	}
+	
+	private void createGameButtonClicked(final ActionEvent event) {
+		new CreateGameView(this.manager).setVisible(true);
+		// TODO: GameView anzeigen
 	}
 	
 	private void refreshLobbyViewButtonClicked(final ActionEvent actionEvent) {
@@ -108,20 +108,6 @@ public class LobbyView extends JFrame implements ClientView {
 		this.lobbyPanel.add(new JScrollPane(this.lobbyTable));
 		add(this.lobbyPanel, BorderLayout.CENTER);
 		revalidate();
-	}
-	
-	private void connectButtonClicked(final ActionEvent event) {
-		if (event == null) {
-			LOGGER.warn("Connect button clicked event is null.");
-			return;
-		}
-		
-		try {
-			this.manager.getClientManager().connect();
-			this.connectButton.setEnabled(true);
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(this, "Could not connect to the Server", "Could not connect!", JOptionPane.ERROR_MESSAGE);
-		}
 	}
 	
 	/**

@@ -7,8 +7,10 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.rvwbk.group03.cardsagainsthumanity.network.Configuration;
 import de.rvwbk.group03.cardsagainsthumanity.network.Game;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.CommandHelper;
+import de.rvwbk.group03.cardsagainsthumanity.network.command.client.CreateGameCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.GetGameListCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.JoinGameCommand;
 
@@ -44,6 +46,13 @@ public class LobbyManager implements LobbyManagerEventHandler {
 	
 	public void setGames(final List<Game> games) {
 		this.games = games;
+	}
+	
+	public void createGame(final Configuration config) {
+		CreateGameCommand createGameCommand = new CreateGameCommand();
+		createGameCommand.setConfiguration(config);
+		
+		ClientManager.getServerCommunication().getWriteCommunication().writeMessage(CommandHelper.commandToJson(createGameCommand));
 	}
 	
 	public void joinGame(final int id, final String password) {
