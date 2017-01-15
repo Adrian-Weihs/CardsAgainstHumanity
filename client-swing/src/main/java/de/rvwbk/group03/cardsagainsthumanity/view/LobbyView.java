@@ -57,7 +57,7 @@ public class LobbyView extends JFrame implements ClientView {
 		
 		setTitle(VIEW_NAME);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(700, 500);
+		setSize(700, 550);
 		//		setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
 		
 		this.buttonPanel.add(this.createGameButton);
@@ -84,12 +84,13 @@ public class LobbyView extends JFrame implements ClientView {
 	private void joinGameButtonClicked(final ActionEvent event) {
 		// TODO: Passwort umsetzen
 		this.manager.getLobbyManager().joinGame(getSelectedGame().getId(), Strings.EMPTY);
-		// TODO: GameView anzeigen
+		dispose();
+		// TODO: PreGameView anzeigen
 	}
 	
 	private void createGameButtonClicked(final ActionEvent event) {
-		new CreateGameView(this.manager).setVisible(true);
-		// TODO: GameView anzeigen
+		new CreateGameView(this.manager, true).setVisible(true);
+		// TODO: PreGameView anzeigen
 	}
 	
 	private void refreshLobbyViewButtonClicked(final ActionEvent actionEvent) {
@@ -133,6 +134,7 @@ public class LobbyView extends JFrame implements ClientView {
 	private void gameSelectionChanged(final ListSelectionEvent event) {
 		this.joinGameButton.setEnabled(this.lobbyTable.getSelectedRow() != -1);
 	}
+	
 	
 	@Override
 	public void addRecievedMessage(final String recievedMessage) {

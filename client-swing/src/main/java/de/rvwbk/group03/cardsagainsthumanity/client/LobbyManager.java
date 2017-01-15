@@ -28,7 +28,8 @@ public class LobbyManager implements LobbyManagerEventHandler {
 	}
 	
 	private List<ClientEventListener> lobbyListeners = new ArrayList<>();
-	private List<Game> games = new ArrayList<>();
+	private List<Game> allGamesInLobby = new ArrayList<>();
+	private Game createdGame;
 	
 	public List<Game> getGames() {
 		
@@ -41,11 +42,11 @@ public class LobbyManager implements LobbyManagerEventHandler {
 		this.lobbyListeners.forEach(listener -> listener.handleClientEvent(new LobbyManagerEvent(this, LobbyManagerAction.GET_GAMES)));
 		removeLobbyManagerActionEventListener(eventImpl);
 		
-		return this.games;
+		return this.allGamesInLobby;
 	}
 	
 	public void setGames(final List<Game> games) {
-		this.games = games;
+		this.allGamesInLobby = games;
 	}
 	
 	public void createGame(final Configuration config) {
@@ -53,6 +54,11 @@ public class LobbyManager implements LobbyManagerEventHandler {
 		createGameCommand.setConfiguration(config);
 		
 		ClientManager.getServerCommunication().getWriteCommunication().writeMessage(CommandHelper.commandToJson(createGameCommand));
+		
+		ClientEventListenerImpl eventImpl= new ClientEventListenerImpl();
+		addLobbyManagerActionEventListener(eventImpl);
+		this.lobbyListeners.forEach(listener -> listener.handleClientEvent(new LobbyManagerEvent(this, LobbyManagerAction.GET_CURRENT_GAME)));
+		removeLobbyManagerActionEventListener(eventImpl);
 	}
 	
 	public void joinGame(final int id, final String password) {
@@ -71,17 +77,20 @@ public class LobbyManager implements LobbyManagerEventHandler {
 	@Override
 	public void addLobbyManagerActionEventListener(final ClientEventListener listener) throws NullPointerException {
 		this.lobbyListeners.add(Objects.requireNonNull(listener, "listener must not be null."));
-		
-		// Workaround preventing race condition
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// Won't happen
-		}
 	}
+	
+	public void setCreatedGame(final Game game) {
+		this.createdGame = game;
+	}
+	
+	public Game getCreatedGame() {
+		return this.createdGame;
+	}
+	
 	
 	@Override
 	public boolean removeLobbyManagerActionEventListener(final ClientEventListener listener) throws NullPointerException {
 		return this.lobbyListeners.remove(Objects.requireNonNull(listener, "listener must not be null."));
 	}
+	
 }

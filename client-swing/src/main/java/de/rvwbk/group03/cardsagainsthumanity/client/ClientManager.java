@@ -92,14 +92,10 @@ public class ClientManager implements ClientManagerEventHandler {
 		
 	}
 	
-	public void doLogin(final String user, final String password) throws WrongUserNameOrPasswordException {
+	public void doLogin(final String user, final String password) throws WrongUserNameOrPasswordException, IOException {
 		
 		if (serverCommunication == null) {
-			try {
-				connect();
-			} catch (IOException e) {
-				return;
-			}
+			connect();
 		}
 		
 		LoginCommand command = new LoginCommand(user, password);

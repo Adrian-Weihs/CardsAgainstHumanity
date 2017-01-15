@@ -34,7 +34,14 @@ public class ClientLobbyModel extends AbstractTableModel {
 	
 	@Override
 	public Object getValueAt(final int rowIndex, final int columnIndex) {
-		Game game = this.games.get(rowIndex);
+		Game game;
+		
+		try {
+			game = this.games.get(rowIndex);
+		} catch (IndexOutOfBoundsException e) {
+			return null;
+		}
+		
 		switch (columnIndex) {
 			case 0:
 				return game.getConfiguration().getName();

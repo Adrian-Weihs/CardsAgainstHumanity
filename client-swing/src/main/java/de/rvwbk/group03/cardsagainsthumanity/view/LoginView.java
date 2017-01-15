@@ -2,6 +2,7 @@ package de.rvwbk.group03.cardsagainsthumanity.view;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -71,6 +72,9 @@ public class LoginView extends JFrame {
 		} catch (WrongUserNameOrPasswordException e) {
 			dispose();
 			new LoginView(this.manager).init(true, "Kombination aus User und Password nicht korrekt");
+		} catch (IOException e) {
+			dispose();
+			new LoginView(this.manager).init(true, "Konnte keine Verbindung zum Server herstellen.");
 		}
 	}
 }

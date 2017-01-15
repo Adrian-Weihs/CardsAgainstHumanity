@@ -8,11 +8,20 @@ import de.rvwbk.group03.cardsagainsthumanity.base.event.AbstractEvent;
 import de.rvwbk.group03.cardsagainsthumanity.network.Game;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.Command;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.CommandHelper;
+import de.rvwbk.group03.cardsagainsthumanity.network.command.server.GameCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.server.GameListCommand;
 
 public interface ClientEventListener {
 	public default void handleClientEvent(final AbstractEvent event) throws NullPointerException {
 		Objects.requireNonNull(event, "event must not be null.");
+		
+		// Workaround preventing race condition
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// Won't happen
+		}
+		
 		if (event instanceof ClientManagerEvent) {
 			ClientManagerAction action = ((ClientManagerEvent)event).getAction();
 			if (action == ClientManagerAction.CONNECT) {
@@ -42,6 +51,15 @@ public interface ClientEventListener {
 				}
 			} else if (action == LobbyManagerAction.JOIN_GAME) {
 				// TODO: GameView
+			} else if (action == LobbyManagerAction.GET_CURRENT_GAME) {
+				String jsonString = ClientManager.getServerCommunication().getReadCommunication().getLastMessage();
+				Command command = CommandHelper.jsonToCommand(jsonString);
+				if (command instanceof GameCommand) {
+					GameCommand gameCommand = (GameCommand)command;
+					((LobbyManager)event.getSource()).setCreatedGame(gameCommand.getGame());
+				} else {
+					// TODO: Error Handling
+				}
 			} else {
 				// TODO: Error Handling
 			}

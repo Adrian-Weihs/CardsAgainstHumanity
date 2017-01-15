@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import de.rvwbk.group03.cardsagainsthumanity.base.network.AbstractBufferedReadCommunication;
 import de.rvwbk.group03.cardsagainsthumanity.client.ClientManager;
-import de.rvwbk.group03.cardsagainsthumanity.ui.UiManager;
+import de.rvwbk.group03.cardsagainsthumanity.util.UiManager;
 
 public class ServerToClientCommunication extends AbstractBufferedReadCommunication {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServerToClientCommunication.class);

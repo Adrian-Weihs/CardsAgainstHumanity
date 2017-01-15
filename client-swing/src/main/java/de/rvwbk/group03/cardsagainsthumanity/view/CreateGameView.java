@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import de.rvwbk.group03.cardsagainsthumanity.client.swing.AbstractManager;
 import de.rvwbk.group03.cardsagainsthumanity.network.Configuration;
+import de.rvwbk.group03.cardsagainsthumanity.util.UiManager;
 
 public class CreateGameView extends JFrame {
 	
@@ -31,10 +32,12 @@ public class CreateGameView extends JFrame {
 	private JSlider maxPlayersSlider = new JSlider();
 	
 	private AbstractManager manager;
+	private boolean createGame;
 	
 	
-	public CreateGameView(final AbstractManager manager) {
+	public CreateGameView(final AbstractManager manager, final boolean createGame) {
 		this.manager = manager;
+		this.createGame = createGame;
 		
 		init();
 	}
@@ -45,6 +48,9 @@ public class CreateGameView extends JFrame {
 		setSize(460, 450);
 		getContentPane().setLayout(null);
 		
+		if (!this.createGame) {
+			this.createButton.setText("Update game");
+		}
 		this.createButton.setBounds(341, 377, 89, 23);
 		this.createButton.addActionListener(this::createButtonClicked);
 		getContentPane().add(this.createButton);
@@ -69,7 +75,7 @@ public class CreateGameView extends JFrame {
 		panel.add(lblName, "2, 6");
 		
 		this.nameTextField = new JTextField();
-		this.nameTextField.setText("Server game " + COUNT.get());
+		this.nameTextField.setText("Client game " + COUNT.get());
 		panel.add(this.nameTextField, "6, 6, fill, default");
 		this.nameTextField.setColumns(10);
 		
@@ -132,8 +138,14 @@ public class CreateGameView extends JFrame {
 				config.setJoinPassword(joinPassword);
 			}
 			COUNT.incrementAndGet();
-			this.manager.getLobbyManager().createGame(config);
-			dispose();
+			if (this.createGame) {
+				this.manager.getLobbyManager().createGame(config);
+			} else {
+				this.manager.getGameManager().updateGame(config);
+			}
+			UiManager.closeAllViews();
+			new PreGameView(this.manager);
+			
 		} catch (IllegalArgumentException e) {
 			LOGGER.error("Could not create a Game.", e);
 		}
