@@ -25,11 +25,11 @@ public interface ClientEventListener {
 		if (event instanceof ClientManagerEvent) {
 			ClientManagerAction action = ((ClientManagerEvent)event).getAction();
 			if (action == ClientManagerAction.CONNECT) {
-				// requires no response
+				// Nothing to do here
 			} else if (action == ClientManagerAction.DISCONNECT) {
-				//				new ErrorView().init();
+				//	Nothing to do here
 			} else if (action == ClientManagerAction.LOGIN) {
-				//				new GameView().init();
+				//	Nothing to do here
 			} else {
 				// TODO: ErrorHandling
 			}

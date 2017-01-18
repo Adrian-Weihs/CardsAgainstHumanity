@@ -10,12 +10,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.rvwbk.group03.cardsagainsthumanity.base.exception.WrongUserNameOrPasswordException;
+import de.rvwbk.group03.cardsagainsthumanity.client.swing.AbstractManager;
 import de.rvwbk.group03.cardsagainsthumanity.communication.ServerCommunication;
 import de.rvwbk.group03.cardsagainsthumanity.network.DisconnectReason;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.Command;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.CommandHelper;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.LoginCommand;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.server.DisconnectCommand;
+import de.rvwbk.group03.cardsagainsthumanity.util.UiManager;
+import de.rvwbk.group03.cardsagainsthumanity.view.LoginView;
 
 public class ClientManager implements ClientManagerEventHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClientManager.class);
@@ -50,7 +53,7 @@ public class ClientManager implements ClientManagerEventHandler {
 		}
 	}
 	
-	public String disconnect() throws IOException {
+	public void disconnect() throws IOException {
 		
 		String disconnectReason = "You lost the connection to the server";
 		
@@ -86,10 +89,12 @@ public class ClientManager implements ClientManagerEventHandler {
 			
 			serverCommunication.getSocket().close();
 			serverCommunication = null;
+			
+			UiManager.closeAllViews();
+			
+			connect();
+			new LoginView(new AbstractManager()).init(true, disconnectReason);
 		}
-		
-		return disconnectReason;
-		
 	}
 	
 	public void doLogin(final String user, final String password) throws WrongUserNameOrPasswordException, IOException {
