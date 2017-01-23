@@ -44,7 +44,7 @@ public class PlayerTableModel extends AbstractTableModel {
 	public String getColumnName(final int column) {
 		switch (column) {
 			case 0:
-				return "Name";
+				return "Players";
 			case 1:
 				return "Score";
 			default:

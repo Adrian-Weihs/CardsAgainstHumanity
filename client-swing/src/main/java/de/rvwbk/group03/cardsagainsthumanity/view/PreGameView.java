@@ -1,6 +1,7 @@
 package de.rvwbk.group03.cardsagainsthumanity.view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class PreGameView extends JFrame {
 	}
 	
 	private void init() {
-		setSize(600, 200);
+		setSize(600, 250);
 		setTitle("Manage Game");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -54,7 +55,10 @@ public class PreGameView extends JFrame {
 		this.currentPlayersTable.setModel(new PlayerTableModel(this.currentGame, false));
 		
 		
-		this.playerPanel.add(new JScrollPane(this.currentPlayersTable));
+		JScrollPane tableWrapper = new JScrollPane(this.currentPlayersTable);
+		tableWrapper.setPreferredSize(new Dimension(500, this.currentPlayersTable.getRowHeight() * 8));
+		
+		this.playerPanel.add(tableWrapper);
 		add(this.playerPanel, BorderLayout.CENTER);
 		
 		setVisible(true);

@@ -85,12 +85,11 @@ public class LobbyView extends JFrame implements ClientView {
 		// TODO: Passwort umsetzen
 		this.manager.getLobbyManager().joinGame(getSelectedGame().getId(), Strings.EMPTY);
 		dispose();
-		// TODO: PreGameView anzeigen
+		new PreGameView(this.manager);
 	}
 	
 	private void createGameButtonClicked(final ActionEvent event) {
 		new CreateGameView(this.manager, true).setVisible(true);
-		// TODO: PreGameView anzeigen
 	}
 	
 	private void refreshLobbyViewButtonClicked(final ActionEvent actionEvent) {
