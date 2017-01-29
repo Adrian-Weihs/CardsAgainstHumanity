@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import de.rvwbk.group03.cardsagainsthumanity.client.swing.AbstractManager;
 import de.rvwbk.group03.cardsagainsthumanity.network.Configuration;
+import de.rvwbk.group03.cardsagainsthumanity.network.Game;
 import de.rvwbk.group03.cardsagainsthumanity.util.UiManager;
 
 public class CreateGameView extends JFrame {
@@ -33,11 +34,13 @@ public class CreateGameView extends JFrame {
 	
 	private AbstractManager manager;
 	private boolean createGame;
+	private Game game;
 	
 	
-	public CreateGameView(final AbstractManager manager, final boolean createGame) {
+	public CreateGameView(final AbstractManager manager, final boolean createGame, final Game game) {
 		this.manager = manager;
 		this.createGame = createGame;
+		this.game = game;
 		
 		init();
 	}
@@ -122,6 +125,9 @@ public class CreateGameView extends JFrame {
 	
 	private void cancelButtonClicked(final ActionEvent event) {
 		dispose();
+		if (!this.createGame) {
+			new PreGameView(this.manager);
+		}
 	}
 	
 	private void createButtonClicked(final ActionEvent event) {
@@ -141,7 +147,7 @@ public class CreateGameView extends JFrame {
 			if (this.createGame) {
 				this.manager.getLobbyManager().createGame(config);
 			} else {
-				this.manager.getGameManager().updateGame(config);
+				this.manager.getGameManager().updateGame(config, getGame());
 			}
 			UiManager.closeAllViews();
 			new PreGameView(this.manager);
@@ -149,6 +155,10 @@ public class CreateGameView extends JFrame {
 		} catch (IllegalArgumentException e) {
 			LOGGER.error("Could not create a Game.", e);
 		}
+	}
+	
+	public Game getGame() {
+		return this.game;
 	}
 	
 }

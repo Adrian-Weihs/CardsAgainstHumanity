@@ -54,7 +54,7 @@ public class ClientLobbyModel extends AbstractTableModel {
 			case 4:
 				return game.getGameState();
 			case 5:
-				// TODO: Wieder auskommentieren, wenn entsprechende Methode wieder existiert
+				// TODO: Wieder einkommentieren, wenn entsprechende Methode wieder existiert
 				return /*game.getConfiguration().isPasswordProtcted() ? "Yes" : */"No";
 			default:
 				return null;

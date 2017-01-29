@@ -49,8 +49,6 @@ public interface ClientEventListener {
 				} else {
 					// TODO: Error Handling
 				}
-			} else if (action == LobbyManagerAction.JOIN_GAME) {
-				// TODO: GameView
 			} else if (action == LobbyManagerAction.GET_CURRENT_GAME) {
 				String jsonString = ClientManager.getServerCommunication().getReadCommunication().getLastMessage();
 				Command command = CommandHelper.jsonToCommand(jsonString);

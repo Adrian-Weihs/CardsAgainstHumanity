@@ -12,7 +12,12 @@ public class GameView {
 	}
 	
 	private void init() {
+		// TODO: implementieren
 		
+		/*
+		 * Status holen. Wenn noch nicht gestartet --> PreGameView, mit disablten Buttons
+		 * Ansonsten normale View
+		 */
 	}
 	
 }

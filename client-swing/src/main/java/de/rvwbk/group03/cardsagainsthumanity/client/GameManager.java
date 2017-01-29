@@ -11,10 +11,10 @@ import de.rvwbk.group03.cardsagainsthumanity.network.Configuration;
 import de.rvwbk.group03.cardsagainsthumanity.network.Game;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.CommandHelper;
 import de.rvwbk.group03.cardsagainsthumanity.network.command.client.StartGameCommand;
+import de.rvwbk.group03.cardsagainsthumanity.network.command.client.UpdateGameConfigurationCommand;
 
 public class GameManager implements GameManagerEventHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
-	private Game game;
 	
 	private List<ClientEventListener> lobbyListeners = new ArrayList<>();
 	private static RecievedMessageManager recievedMessageManager;
@@ -28,29 +28,16 @@ public class GameManager implements GameManagerEventHandler {
 		return recievedMessageManager;
 	}
 	
-	public Game getGame() {
-		return this.game;
-	}
-	
-	public void setGame(final Game game) {
-		this.game = game;
-	}
-	
 	public void startGame(final Game currentGame) {
 		StartGameCommand startGameCommand = new StartGameCommand(currentGame.getId());
 		ClientManager.getServerCommunication().getWriteCommunication().writeMessage(CommandHelper.commandToJson(startGameCommand));
 		// TODO: Error Handling
 	}
 	
-	
-	public Game updateGame(final Game currentGame) {
-		// TODO: CreateView aufrufen und Configuration daraus an die untere Methode weiterleiten
-		return null;
-	}
-	
-	public Game updateGame(final Configuration config) {
-		// TODO: Den eigentlichen Command umsetzen
-		return null;
+	public void updateGame(final Configuration config, final Game game) {
+		UpdateGameConfigurationCommand command = new UpdateGameConfigurationCommand(game.getId(), config);
+		String jsonMessage = CommandHelper.commandToJson(command);
+		ClientManager.getServerCommunication().getWriteCommunication().writeMessage(jsonMessage);
 	}
 	
 	

@@ -26,12 +26,7 @@ public class PlayedCardsTableModel extends AbstractTableModel {
 	
 	@Override
 	public Object getValueAt(final int rowIndex, final int columnIndex) {
-		try {
-			return this.whiteCardsText.get(rowIndex);
-		} catch (IndexOutOfBoundsException e) {
-			// TODO: Exception loggen
-			return null;
-		}
+		return this.whiteCardsText.get(rowIndex);
 	}
 	
 	

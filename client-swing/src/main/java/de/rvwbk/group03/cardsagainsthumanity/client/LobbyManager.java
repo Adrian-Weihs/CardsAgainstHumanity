@@ -61,17 +61,9 @@ public class LobbyManager implements LobbyManagerEventHandler {
 		removeLobbyManagerActionEventListener(eventImpl);
 	}
 	
-	public void joinGame(final int id, final String password) {
-		
-		JoinGameCommand joinGameCommand = new JoinGameCommand(id, password);
-		
+	public void joinGame(final Game game, final String password) {
+		JoinGameCommand joinGameCommand = new JoinGameCommand(game.getId(), password);
 		ClientManager.getServerCommunication().getWriteCommunication().writeMessage(CommandHelper.commandToJson(joinGameCommand));
-		
-		ClientEventListenerImpl eventImpl= new ClientEventListenerImpl();
-		addLobbyManagerActionEventListener(eventImpl);
-		this.lobbyListeners.forEach(listener -> listener.handleClientEvent(new LobbyManagerEvent(this, LobbyManagerAction.JOIN_GAME)));
-		removeLobbyManagerActionEventListener(eventImpl);
-		
 	}
 	
 	@Override

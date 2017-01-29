@@ -47,7 +47,7 @@ public class PreGameView extends JFrame {
 		add(this.buttonPanel, BorderLayout.SOUTH);
 		
 		// TODO: Updaten, wenn ein weiterer Spieler beitritt, eine Konfiguration geändert wird
-		// und allgemein den Table in eigene Methode auslagern
+		// TODO2: und allgemein den Table in eigene Methode auslagern
 		setCurrentGame(this.manager.getLobbyManager().getCreatedGame());
 		
 		this.currentPlayersTable.setEnabled(true);
@@ -73,11 +73,12 @@ public class PreGameView extends JFrame {
 	}
 	
 	private void updateGameButtonClicked(final ActionEvent event) {
-		setCurrentGame(this.manager.getGameManager().updateGame(this.currentGame));
+		dispose();
+		new CreateGameView(this.manager, false, getCurrentGame()).setVisible(true);
 	}
 	
 	private void startGameButtonClicked(final ActionEvent event) {
-		this.manager.getGameManager().startGame(this.currentGame);
+		this.manager.getGameManager().startGame(getCurrentGame());
 	}
 	
 }
